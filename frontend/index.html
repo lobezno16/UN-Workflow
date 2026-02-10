@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UN Workflow Management System</title>
+    <meta name="description" content="United Nations Bureaucratic Workflow Management System - Managing matters, voting, resolutions, and more across the six principal UN organs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Main Layout -->
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🌐</span>
+                    <span class="logo-text">UN Workflow</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <span></span>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#organs" class="nav-link" data-page="organs">
+                            <span class="nav-icon">🏛️</span>
+                            <span class="nav-text">UN Organs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#matters" class="nav-link" data-page="matters">
+                            <span class="nav-icon">📋</span>
+                            <span class="nav-text">Matters</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#voting" class="nav-link" data-page="voting">
+                            <span class="nav-icon">🗳️</span>
+                            <span class="nav-text">Voting</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#resolutions" class="nav-link" data-page="resolutions">
+                            <span class="nav-icon">📜</span>
+                            <span class="nav-text">Resolutions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#icj" class="nav-link" data-page="icj">
+                            <span class="nav-icon">⚖️</span>
+                            <span class="nav-text">ICJ Cases</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#secretariat" class="nav-link" data-page="secretariat">
+                            <span class="nav-icon">🏢</span>
+                            <span class="nav-text">Secretariat</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#trusteeship" class="nav-link" data-page="trusteeship">
+                            <span class="nav-icon">🗺️</span>
+                            <span class="nav-text">Trusteeship</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#audit" class="nav-link" data-page="audit">
+                            <span class="nav-icon">📝</span>
+                            <span class="nav-text">Audit Log</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">UN</div>
+                    <div class="user-details">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">System Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="page-title">
+                    <h1 id="page-title">Dashboard</h1>
+                    <span class="breadcrumb" id="breadcrumb">Home / Dashboard</span>
+                </div>
+                <div class="top-bar-actions">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search..." id="global-search">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                    <button class="btn-icon" title="Notifications">🔔</button>
+                    <button class="btn-icon" title="Settings">⚙️</button>
+                </div>
+            </header>
+
+            <div class="content-area" id="content-area">
+                <!-- Dynamic content loaded here -->
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <span>Loading...</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Container -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Modal Title</h2>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Modal content -->
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <!-- Modal actions -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

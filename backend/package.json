@@ -1,0 +1,19 @@
+{
+  "name": "un-workflow-backend",
+  "version": "1.0.0",
+  "description": "United Nations Bureaucratic Workflow Management System - Backend API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mysql2": "^3.6.5"
+  },
+  "keywords": ["un", "workflow", "management", "database"],
+  "author": "Student Project",
+  "license": "MIT"
+}
