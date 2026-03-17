@@ -1,147 +1,459 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UN Workflow Management System</title>
-    <meta name="description" content="United Nations Bureaucratic Workflow Management System - Managing matters, voting, resolutions, and more across the six principal UN organs.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>United Nations | Workflow Management System</title>
+  <meta name="description"
+    content="United Nations Bureaucratic Workflow Management System — Managing matters, voting, resolutions, and ICJ cases across the six principal UN organs.">
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <!-- Favicon (UN Gold circle) -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%23c9a84c' stroke-width='2'/%3E%3Ctext x='16' y='21' text-anchor='middle' fill='%23c9a84c' font-size='14' font-family='serif' font-weight='bold'%3EUN%3C/text%3E%3C/svg%3E">
 </head>
+
 <body>
-    <!-- Toast Container -->
-    <div id="toast-container"></div>
+  <!-- ============================================================ -->
+  <!-- PRELOADER                                                     -->
+  <!-- ============================================================ -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__text">UNITED NATIONS</div>
+  </div>
 
-    <!-- Main Layout -->
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <span class="logo-icon">🌐</span>
-                    <span class="logo-text">UN Workflow</span>
-                </div>
-                <button class="sidebar-toggle" id="sidebar-toggle">
-                    <span></span>
-                </button>
-            </div>
-            
-            <nav class="sidebar-nav">
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="#dashboard" class="nav-link active" data-page="dashboard">
-                            <span class="nav-icon">📊</span>
-                            <span class="nav-text">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#organs" class="nav-link" data-page="organs">
-                            <span class="nav-icon">🏛️</span>
-                            <span class="nav-text">UN Organs</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#matters" class="nav-link" data-page="matters">
-                            <span class="nav-icon">📋</span>
-                            <span class="nav-text">Matters</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#voting" class="nav-link" data-page="voting">
-                            <span class="nav-icon">🗳️</span>
-                            <span class="nav-text">Voting</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#resolutions" class="nav-link" data-page="resolutions">
-                            <span class="nav-icon">📜</span>
-                            <span class="nav-text">Resolutions</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#icj" class="nav-link" data-page="icj">
-                            <span class="nav-icon">⚖️</span>
-                            <span class="nav-text">ICJ Cases</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#secretariat" class="nav-link" data-page="secretariat">
-                            <span class="nav-icon">🏢</span>
-                            <span class="nav-text">Secretariat</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#trusteeship" class="nav-link" data-page="trusteeship">
-                            <span class="nav-icon">🗺️</span>
-                            <span class="nav-text">Trusteeship</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#audit" class="nav-link" data-page="audit">
-                            <span class="nav-icon">📝</span>
-                            <span class="nav-text">Audit Log</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <div class="user-avatar">UN</div>
-                    <div class="user-details">
-                        <span class="user-name">Admin User</span>
-                        <span class="user-role">System Administrator</span>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="top-bar">
-                <div class="page-title">
-                    <h1 id="page-title">Dashboard</h1>
-                    <span class="breadcrumb" id="breadcrumb">Home / Dashboard</span>
-                </div>
-                <div class="top-bar-actions">
-                    <div class="search-box">
-                        <input type="text" placeholder="Search..." id="global-search">
-                        <span class="search-icon">🔍</span>
-                    </div>
-                    <button class="btn-icon" title="Notifications">🔔</button>
-                    <button class="btn-icon" title="Settings">⚙️</button>
-                </div>
-            </header>
-
-            <div class="content-area" id="content-area">
-                <!-- Dynamic content loaded here -->
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                    <span>Loading...</span>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Modal Container -->
-    <div class="modal-overlay" id="modal-overlay">
-        <div class="modal" id="modal">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modal-title">Modal Title</h2>
-                <button class="modal-close" id="modal-close">&times;</button>
-            </div>
-            <div class="modal-body" id="modal-body">
-                <!-- Modal content -->
-            </div>
-            <div class="modal-footer" id="modal-footer">
-                <!-- Modal actions -->
-            </div>
+  <!-- ============================================================ -->
+  <!-- NAVIGATION                                                    -->
+  <!-- ============================================================ -->
+  <nav class="nav" id="main-nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">
+        <div class="nav__logo-icon">UN</div>
+        <div>
+          <div class="nav__logo-text">United Nations</div>
+          <div class="nav__logo-sub">Workflow System</div>
         </div>
+      </a>
+
+      <div class="nav__links">
+        <a href="#pulse" class="nav__link active" data-section="pulse">Global Pulse</a>
+        <a href="#organs" class="nav__link" data-section="organs">Organs</a>
+        <a href="#icj" class="nav__link" data-section="icj">ICJ</a>
+        <a href="organs/general-assembly.html" class="nav__link">GA</a>
+        <a href="organs/security-council.html" class="nav__link">SC</a>
+      </div>
+
+      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/app.js"></script>
+    <div class="nav__mobile-menu" id="mobile-menu">
+      <a href="#pulse" class="nav__mobile-link">Global Pulse</a>
+      <a href="#organs" class="nav__mobile-link">Organs</a>
+      <a href="#icj" class="nav__mobile-link">ICJ</a>
+      <a href="organs/general-assembly.html" class="nav__mobile-link">General Assembly</a>
+      <a href="organs/security-council.html" class="nav__mobile-link">Security Council</a>
+      <a href="organs/ecosoc.html" class="nav__mobile-link">ECOSOC</a>
+      <a href="organs/icj.html" class="nav__mobile-link">International Court of Justice</a>
+      <a href="organs/secretariat.html" class="nav__mobile-link">Secretariat</a>
+      <a href="organs/trusteeship.html" class="nav__mobile-link">Trusteeship Council</a>
+    </div>
+  </nav>
+
+  <!-- ============================================================ -->
+  <!-- HERO SECTION                                                  -->
+  <!-- ============================================================ -->
+  <section class="hero" id="hero">
+    <div class="hero__bg">
+      <img class="hero__bg-image" src="images/hero-bg.png" alt="" loading="eager">
+      <div class="hero__bg-overlay"></div>
+      <div class="hero__bg-grain"></div>
+    </div>
+
+    <canvas class="hero__particles" id="hero-canvas"></canvas>
+
+    <div class="hero__line hero__line--left"></div>
+    <div class="hero__line hero__line--right"></div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow" id="hero-eyebrow">Established 1945 · 193 Member States</p>
+      <h1 class="hero__title" id="hero-title">
+        <span>UNITED</span>
+        <span class="t-outline">NATIONS</span>
+      </h1>
+      <p class="hero__subtitle" id="hero-subtitle">
+        Monitoring the pulse of global governance — matters, resolutions, voting,
+        and justice across the six principal organs of the United Nations.
+      </p>
+      <div class="hero__cta" id="hero-cta">
+        <a href="#organs" class="btn btn-gold">Explore Organs</a>
+        <a href="#pulse" class="btn btn-outline">Global Pulse ↓</a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator" id="scroll-indicator">
+      <span class="t-label" style="font-size: 0.6rem;">Scroll</span>
+      <div class="scroll-indicator__line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- STATS BAR                                                     -->
+  <!-- ============================================================ -->
+  <section class="parallax-section" style="background: var(--color-bg-secondary);">
+    <div class="container">
+      <div class="stats-bar" id="stats-bar">
+        <div class="stat-item reveal">
+          <div class="stat-item__number" data-count="193">0</div>
+          <div class="stat-item__label">Member States</div>
+        </div>
+        <div class="stat-item reveal" style="transition-delay: 0.1s">
+          <div class="stat-item__number" data-count="8" id="stat-matters">0</div>
+          <div class="stat-item__label">Active Matters</div>
+        </div>
+        <div class="stat-item reveal" style="transition-delay: 0.2s">
+          <div class="stat-item__number" data-count="2" id="stat-resolutions">0</div>
+          <div class="stat-item__label">Resolutions</div>
+        </div>
+        <div class="stat-item reveal" style="transition-delay: 0.3s">
+          <div class="stat-item__number" data-count="3" id="stat-icj">0</div>
+          <div class="stat-item__label">ICJ Cases</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- GLOBAL PULSE — NEWS / ACTIVITY                                -->
+  <!-- ============================================================ -->
+  <section class="pulse-section" id="pulse">
+    <div class="container">
+      <div class="pulse__header reveal">
+        <div class="section-label">
+          <span class="t-label">Global Pulse</span>
+        </div>
+        <h2 class="pulse__title">Latest Activity</h2>
+        <p class="t-secondary" style="max-width: 550px;">
+          Current matters under deliberation, recent votes, and active resolutions across UN organs.
+        </p>
+      </div>
+
+      <div class="pulse__grid" id="pulse-grid">
+        <!-- Cards populated by JS -->
+        <div class="pulse__card" data-organ="GA" data-tilt>
+          <div class="pulse__card-eyebrow">General Assembly · 78th Session</div>
+          <h3 class="pulse__card-title">Resolution on Climate Action Acceleration</h3>
+          <p class="pulse__card-desc">Calls upon all Member States to accelerate efforts to combat climate change and
+            implement the Paris Agreement goals.</p>
+          <div class="pulse__card-meta">
+            <span class="pulse__card-status pulse__card-status--active">Passed</span>
+            <span>·</span>
+            <span>GA/RES/78/001</span>
+            <span>·</span>
+            <span>14 Yes, 0 No, 1 Abstain</span>
+          </div>
+        </div>
+
+        <div class="pulse__card" data-organ="GA" data-tilt>
+          <div class="pulse__card-eyebrow">General Assembly · 78th Session</div>
+          <h3 class="pulse__card-title">Resolution on Digital Cooperation</h3>
+          <p class="pulse__card-desc">Promotes international cooperation on digital technology governance and bridging
+            the digital divide.</p>
+          <div class="pulse__card-meta">
+            <span class="pulse__card-status pulse__card-status--voting">In Voting</span>
+            <span>·</span>
+            <span>GA/RES/78/002</span>
+            <span>·</span>
+            <span>5 votes cast</span>
+          </div>
+        </div>
+
+        <div class="pulse__card" data-organ="SC" data-tilt>
+          <div class="pulse__card-eyebrow">Security Council</div>
+          <h3 class="pulse__card-title">Resolution on Humanitarian Pause</h3>
+          <p class="pulse__card-desc">Calls for humanitarian pauses and corridors throughout conflict zones.</p>
+          <div class="pulse__card-meta">
+            <span class="pulse__card-status pulse__card-status--active">Passed</span>
+            <span>·</span>
+            <span>SC/RES/2712</span>
+            <span>·</span>
+            <span>Binding</span>
+          </div>
+        </div>
+
+        <div class="pulse__card" data-organ="SC" data-tilt>
+          <div class="pulse__card-eyebrow">Security Council</div>
+          <h3 class="pulse__card-title">Peacekeeping Mission Extension</h3>
+          <p class="pulse__card-desc">Extends the mandate of peacekeeping operations in designated regions.</p>
+          <div class="pulse__card-meta">
+            <span class="pulse__card-status pulse__card-status--pending">Pending Approval</span>
+            <span>·</span>
+            <span>SC/RES/2713</span>
+          </div>
+        </div>
+
+        <div class="pulse__card" data-organ="ECOSOC" data-tilt>
+          <div class="pulse__card-eyebrow">ECOSOC · 2024 Session</div>
+          <h3 class="pulse__card-title">Sustainable Development Goals Review</h3>
+          <p class="pulse__card-desc">Reviews progress on SDGs and recommends accelerated action across member nations.
+          </p>
+          <div class="pulse__card-meta">
+            <span class="pulse__card-status pulse__card-status--voting">Under Review</span>
+            <span>·</span>
+            <span>ECOSOC/DEC/2024/201</span>
+          </div>
+        </div>
+
+        <div class="pulse__card" data-organ="SEC" data-tilt>
+          <div class="pulse__card-eyebrow">Secretariat</div>
+          <h3 class="pulse__card-title">Staff Regulations Amendment</h3>
+          <p class="pulse__card-desc">Amendments to the Staff Regulations concerning remote work policies for UN
+            personnel.</p>
+          <div class="pulse__card-meta">
+            <span class="pulse__card-status pulse__card-status--active">Approved</span>
+            <span>·</span>
+            <span>ST/SGB/2024/01</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- UN ORGANS — 3D CARD GRID                                      -->
+  <!-- ============================================================ -->
+  <section class="organs-section" id="organs">
+    <div class="container">
+      <div class="pulse__header reveal">
+        <div class="section-label">
+          <span class="t-label">Principal Organs</span>
+        </div>
+        <h2 class="pulse__title">The Six Pillars</h2>
+        <p class="t-secondary" style="max-width: 550px;">
+          Navigate the six principal organs of the United Nations — each with its own mandate, member states, and active
+          matters.
+        </p>
+      </div>
+
+      <div class="organs__grid perspective-container" id="organs-grid">
+        <!-- General Assembly -->
+        <a href="organs/general-assembly.html" class="organ-card tilt-card" data-organ="GA" data-tilt>
+          <div class="organ-card__bg">
+            <img src="images/general-assembly.png" alt="General Assembly Hall" loading="lazy">
+          </div>
+          <div class="organ-card__overlay"></div>
+          <div class="organ-card__content">
+            <div class="organ-card__code">GA · Est. 1945</div>
+            <h3 class="organ-card__name">General Assembly</h3>
+            <p class="organ-card__desc">The main deliberative, policymaking, and representative organ. All 193 Member
+              States have equal representation.</p>
+            <span class="organ-card__arrow">Explore →</span>
+          </div>
+        </a>
+
+        <!-- Security Council -->
+        <a href="organs/security-council.html" class="organ-card tilt-card" data-organ="SC" data-tilt>
+          <div class="organ-card__bg">
+            <img src="images/security-council.png" alt="Security Council Chamber" loading="lazy">
+          </div>
+          <div class="organ-card__overlay"></div>
+          <div class="organ-card__content">
+            <div class="organ-card__code">SC · Est. 1945</div>
+            <h3 class="organ-card__name">Security Council</h3>
+            <p class="organ-card__desc">Primary responsibility for international peace and security. 15 members
+              including 5 permanent with veto power.</p>
+            <span class="organ-card__arrow">Explore →</span>
+          </div>
+        </a>
+
+        <!-- ECOSOC -->
+        <a href="organs/ecosoc.html" class="organ-card tilt-card" data-organ="ECOSOC" data-tilt>
+          <div class="organ-card__bg">
+            <img src="images/ecosoc.png" alt="Economic and Social Development" loading="lazy">
+          </div>
+          <div class="organ-card__overlay"></div>
+          <div class="organ-card__content">
+            <div class="organ-card__code">ECOSOC · Est. 1945</div>
+            <h3 class="organ-card__name">Economic & Social Council</h3>
+            <p class="organ-card__desc">Coordination and recommendations on economic, social, and environmental issues
+              and SDG implementation.</p>
+            <span class="organ-card__arrow">Explore →</span>
+          </div>
+        </a>
+
+        <!-- ICJ -->
+        <a href="organs/icj.html" class="organ-card tilt-card" data-organ="ICJ" data-tilt>
+          <div class="organ-card__bg">
+            <img src="images/icj.png" alt="Peace Palace, The Hague" loading="lazy">
+          </div>
+          <div class="organ-card__overlay"></div>
+          <div class="organ-card__content">
+            <div class="organ-card__code">ICJ · The Hague</div>
+            <h3 class="organ-card__name">International Court of Justice</h3>
+            <p class="organ-card__desc">The principal judicial organ. Settles legal disputes between States and gives
+              advisory opinions on legal questions.</p>
+            <span class="organ-card__arrow">Explore →</span>
+          </div>
+        </a>
+
+        <!-- Secretariat -->
+        <a href="organs/secretariat.html" class="organ-card tilt-card" data-organ="SEC" data-tilt>
+          <div class="organ-card__bg">
+            <img src="images/secretariat.png" alt="UN Headquarters Building" loading="lazy">
+          </div>
+          <div class="organ-card__overlay"></div>
+          <div class="organ-card__content">
+            <div class="organ-card__code">SEC · New York</div>
+            <h3 class="organ-card__name">Secretariat</h3>
+            <p class="organ-card__desc">Carries out the day-to-day work of the Organization. Headed by the
+              Secretary-General with departments worldwide.</p>
+            <span class="organ-card__arrow">Explore →</span>
+          </div>
+        </a>
+
+        <!-- Trusteeship Council -->
+        <a href="organs/trusteeship.html" class="organ-card tilt-card" data-organ="TC" data-tilt>
+          <div class="organ-card__bg">
+            <img src="images/trusteeship.png" alt="UN Trusteeship Council Chamber" loading="lazy">
+          </div>
+          <div class="organ-card__overlay"></div>
+          <div class="organ-card__content">
+            <div class="organ-card__code">TC · Suspended 1994</div>
+            <h3 class="organ-card__name">Trusteeship Council</h3>
+            <p class="organ-card__desc">Supervised Trust Territories' transition to self-governance. Suspended after
+              Palau's independence in 1994.</p>
+            <span class="organ-card__arrow">Explore →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- ICJ SPOTLIGHT                                                 -->
+  <!-- ============================================================ -->
+  <section class="icj-spotlight" id="icj">
+    <div class="container">
+      <div class="icj-spotlight__bg">
+        <img src="images/icj.png" alt="Peace Palace" loading="lazy">
+      </div>
+
+      <div class="icj-spotlight__content">
+        <div class="section-label reveal">
+          <span class="t-label">International Court of Justice</span>
+        </div>
+        <h2 class="icj-spotlight__title mask-reveal" id="icj-title">
+          Justice at<br>The Hague
+        </h2>
+        <p class="t-secondary reveal" style="margin-bottom: var(--space-md);">
+          Active cases and proceedings before the principal judicial organ of the United Nations.
+        </p>
+
+        <div class="icj-spotlight__cases" id="icj-cases">
+          <div class="icj-case-card reveal">
+            <div class="icj-case-card__number">ICJ/2024/001</div>
+            <div class="icj-case-card__title">Maritime Boundary Dispute (Country A v. Country B)</div>
+            <div class="icj-case-card__meta">Contentious · Hearing stage · 3 hearings held · Filed March 2024</div>
+          </div>
+
+          <div class="icj-case-card reveal" style="transition-delay: 0.15s">
+            <div class="icj-case-card__number">ICJ/2024/002</div>
+            <div class="icj-case-card__title">Application of Genocide Convention</div>
+            <div class="icj-case-card__meta">Contentious · Preliminary Objections · Provisional measures ordered</div>
+          </div>
+
+          <div class="icj-case-card reveal" style="transition-delay: 0.3s">
+            <div class="icj-case-card__number">ICJ/2023/005</div>
+            <div class="icj-case-card__title">Advisory Opinion on Climate Obligations</div>
+            <div class="icj-case-card__meta">Advisory · Deliberation · Requested by General Assembly</div>
+          </div>
+        </div>
+
+        <a href="organs/icj.html" class="btn btn-outline reveal" style="margin-top: var(--space-md);">
+          View All Cases →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER                                                        -->
+  <!-- ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__top">
+        <div>
+          <a href="index.html" class="nav__logo" style="margin-bottom: var(--space-sm);">
+            <div class="nav__logo-icon">UN</div>
+            <div>
+              <div class="nav__logo-text">United Nations</div>
+              <div class="nav__logo-sub">Workflow System</div>
+            </div>
+          </a>
+          <p class="footer__brand-text">
+            A comprehensive workflow management system modelling the six principal organs
+            of the United Nations. Track matters, voting, resolutions, ICJ cases, and
+            Secretariat directives.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">Principal Organs</h4>
+          <a href="organs/general-assembly.html" class="footer__link">General Assembly</a>
+          <a href="organs/security-council.html" class="footer__link">Security Council</a>
+          <a href="organs/ecosoc.html" class="footer__link">ECOSOC</a>
+          <a href="organs/icj.html" class="footer__link">Court of Justice</a>
+          <a href="organs/secretariat.html" class="footer__link">Secretariat</a>
+          <a href="organs/trusteeship.html" class="footer__link">Trusteeship Council</a>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">System</h4>
+          <a href="#pulse" class="footer__link">Global Pulse</a>
+          <a href="#" class="footer__link">Audit Log</a>
+          <a href="#" class="footer__link">API Health</a>
+          <a href="#" class="footer__link">Documentation</a>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">About</h4>
+          <a href="#" class="footer__link">DBMS Mini Project</a>
+          <a href="#" class="footer__link">MySQL 8.0</a>
+          <a href="#" class="footer__link">Node.js Backend</a>
+          <a href="#" class="footer__link">GitHub</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span class="footer__copyright">© 2026 UN Workflow Management System — DBMS Mini Project</span>
+        <span class="t-label" style="font-size: 0.6rem;">Built with Express + MySQL</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================ -->
+  <!-- SCRIPTS                                                       -->
+  <!-- ============================================================ -->
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis smooth scroll -->
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <!-- App scripts -->
+  <script src="js/hero.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/app.js"></script>
 </body>
+
 </html>

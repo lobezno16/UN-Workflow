@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>General Assembly | United Nations Workflow System</title>
+  <meta name="description" content="General Assembly — The main deliberative, policymaking, and representative organ of the United Nations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/organ-page.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%23c9a84c' stroke-width='2'/%3E%3Ctext x='16' y='21' text-anchor='middle' fill='%23c9a84c' font-size='14' font-family='serif' font-weight='bold'%3EUN%3C/text%3E%3C/svg%3E">
+</head>
+<body data-organ="GA">
+  <!-- NAVIGATION -->
+  <nav class="nav is-scrolled" id="main-nav">
+    <div class="nav__inner">
+      <a href="../index.html" class="nav__logo">
+        <div class="nav__logo-icon">UN</div>
+        <div>
+          <div class="nav__logo-text">United Nations</div>
+          <div class="nav__logo-sub">Workflow System</div>
+        </div>
+      </a>
+      <div class="nav__links">
+        <a href="../index.html" class="nav__link">Home</a>
+        <a href="general-assembly.html" class="nav__link active">GA</a>
+        <a href="security-council.html" class="nav__link">SC</a>
+        <a href="ecosoc.html" class="nav__link">ECOSOC</a>
+        <a href="icj.html" class="nav__link">ICJ</a>
+        <a href="secretariat.html" class="nav__link">Secretariat</a>
+        <a href="trusteeship.html" class="nav__link">TC</a>
+      </div>
+      <button class="nav__hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+    <div class="nav__mobile-menu" id="mobile-menu">
+      <a href="../index.html" class="nav__mobile-link">← Home</a>
+      <a href="general-assembly.html" class="nav__mobile-link">General Assembly</a>
+      <a href="security-council.html" class="nav__mobile-link">Security Council</a>
+      <a href="ecosoc.html" class="nav__mobile-link">ECOSOC</a>
+      <a href="icj.html" class="nav__mobile-link">ICJ</a>
+      <a href="secretariat.html" class="nav__mobile-link">Secretariat</a>
+      <a href="trusteeship.html" class="nav__mobile-link">Trusteeship Council</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="organ-hero">
+    <div class="organ-hero__bg">
+      <img src="../images/general-assembly.png" alt="General Assembly Hall" loading="eager">
+      <div class="organ-hero__overlay"></div>
+    </div>
+    <div class="container organ-hero__content">
+      <a href="../index.html" class="back-link">← Back to Home</a>
+      <div class="organ-hero__code">GA · Established 1945 · New York, USA</div>
+      <h1 class="organ-hero__title">General Assembly</h1>
+      <p class="organ-hero__desc">
+        The main deliberative, policymaking, and representative organ of the United Nations. 
+        All 193 Member States have equal representation — one nation, one vote.
+      </p>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section style="background: var(--color-bg-secondary); padding: var(--space-lg) 0;">
+    <div class="container">
+      <div class="info-grid reveal">
+        <div class="info-card">
+          <div class="info-card__label">Active Matters</div>
+          <div class="info-card__value">3</div>
+          <div class="info-card__detail">Proposals under deliberation</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card__label">Resolutions Passed</div>
+          <div class="info-card__value">1</div>
+          <div class="info-card__detail">A/RES/78/1 — Climate Action</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card__label">In Voting</div>
+          <div class="info-card__value">1</div>
+          <div class="info-card__detail">Digital Cooperation resolution</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card__label">Active Delegates</div>
+          <div class="info-card__value">15</div>
+          <div class="info-card__detail">Permanent representatives</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATTERS TABLE -->
+  <section class="organ-content">
+    <div class="container">
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">Active Matters</h2>
+          <span class="t-label">GA/78th Session</span>
+        </div>
+        <div class="data-table-wrapper reveal">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Matter Number</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Submitted By</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="t-mono">GA/RES/78/001</td>
+                <td>Resolution on Climate Action Acceleration</td>
+                <td><span class="badge badge--active">Resolution</span></td>
+                <td>High</td>
+                <td><span class="badge badge--passed">Passed</span></td>
+                <td>Linda Thomas-Greenfield (USA)</td>
+              </tr>
+              <tr>
+                <td class="t-mono">GA/RES/78/002</td>
+                <td>Resolution on Digital Cooperation</td>
+                <td><span class="badge badge--active">Resolution</span></td>
+                <td>Medium</td>
+                <td><span class="badge badge--pending">In Voting</span></td>
+                <td>Antje Leendertse (Germany)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RESOLUTIONS -->
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">Adopted Resolutions</h2>
+        </div>
+        <div class="glass-card reveal">
+          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">A/RES/78/1</div>
+          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Climate Action Acceleration</h3>
+          <p class="t-secondary" style="margin-bottom: var(--space-sm);">
+            <em>The General Assembly, recalling the Paris Agreement and its goals, deeply concerned by 
+            the accelerating impacts of climate change, recognizing the need for urgent and ambitious 
+            action...</em>
+          </p>
+          <p style="margin-bottom: var(--space-sm);">
+            1. Calls upon all Member States to enhance their nationally determined contributions;<br>
+            2. Urges developed countries to fulfill climate finance commitments;<br>
+            3. Encourages technology transfer for climate adaptation;<br>
+            4. Requests the Secretary-General to report on implementation progress.
+          </p>
+          <div class="flex gap-sm" style="flex-wrap: wrap;">
+            <span class="badge badge--passed">14 Yes</span>
+            <span class="badge badge--closed">0 No</span>
+            <span class="badge badge--pending">1 Abstain</span>
+            <span class="badge badge--active">In Force</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VOTE TIMELINE -->
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">Voting Record — Climate Action</h2>
+        </div>
+        <div class="timeline reveal">
+          <div class="timeline__item">
+            <div class="timeline__date">2024-09-28</div>
+            <div class="timeline__title">Resolution Adopted</div>
+            <div class="timeline__desc">A/RES/78/1 adopted with 14 votes in favor, 1 abstention</div>
+          </div>
+          <div class="timeline__item">
+            <div class="timeline__date">2024-09-27</div>
+            <div class="timeline__title">Voting Completed</div>
+            <div class="timeline__desc">All 15 eligible states cast their votes</div>
+          </div>
+          <div class="timeline__item">
+            <div class="timeline__date">2024-09-26</div>
+            <div class="timeline__title">Approved for Vote</div>
+            <div class="timeline__desc">Secretary-General approved the matter for General Assembly vote</div>
+          </div>
+          <div class="timeline__item">
+            <div class="timeline__date">2024-09-15</div>
+            <div class="timeline__title">Matter Submitted</div>
+            <div class="timeline__desc">Submitted by Ambassador Linda Thomas-Greenfield (USA)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__bottom">
+        <span class="footer__copyright">© 2024 UN Workflow Management System</span>
+        <a href="../index.html" class="back-link">← Back to Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

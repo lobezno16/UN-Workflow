@@ -1,0 +1,489 @@
+/* ============================================================================
+   UN WORKFLOW SYSTEM — Design System
+   main.css — Tokens, Reset, Typography, Utilities
+   ============================================================================ */
+
+/* --- Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+/* ============================================================================
+   DESIGN TOKENS
+   ============================================================================ */
+:root {
+  /* Colors */
+  --color-bg-primary:    #0a0e17;
+  --color-bg-secondary:  #0f1520;
+  --color-bg-tertiary:   #151c2c;
+  --color-bg-card:       rgba(255,255,255,0.03);
+  --color-bg-glass:      rgba(255,255,255,0.04);
+  --color-border-glass:  rgba(255,255,255,0.08);
+  --color-border-subtle: rgba(255,255,255,0.05);
+
+  --color-gold:          #c9a84c;
+  --color-gold-bright:   #e8c84a;
+  --color-gold-dim:      #8a7230;
+  --color-blue-un:       #4b9cd3;
+  --color-blue-bright:   #5bb8f5;
+  --color-blue-dim:      #2a5f80;
+  --color-teal:          #3ecfb4;
+  --color-red:           #e85555;
+  --color-green:         #5ecc6e;
+  --color-purple:        #a78bfa;
+
+  --color-text-primary:  #e8e6e3;
+  --color-text-secondary: rgba(232,230,227,0.6);
+  --color-text-tertiary:  rgba(232,230,227,0.35);
+  --color-text-accent:   var(--color-gold);
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Cascadia Mono', monospace;
+
+  --fs-hero:    clamp(3.5rem, 10vw, 9rem);
+  --fs-h1:      clamp(2.5rem, 5vw, 5rem);
+  --fs-h2:      clamp(1.8rem, 3.5vw, 3rem);
+  --fs-h3:      clamp(1.2rem, 2vw, 1.8rem);
+  --fs-body:    clamp(0.95rem, 1.2vw, 1.1rem);
+  --fs-small:   clamp(0.8rem, 1vw, 0.9rem);
+  --fs-caption: clamp(0.7rem, 0.8vw, 0.8rem);
+  --fs-mono:    clamp(0.75rem, 0.9vw, 0.85rem);
+
+  --lh-tight:    1.1;
+  --lh-snug:     1.3;
+  --lh-normal:   1.6;
+  --lh-relaxed:  1.8;
+
+  --ls-tight:    -0.03em;
+  --ls-normal:   0;
+  --ls-wide:     0.08em;
+  --ls-ultra:    0.2em;
+
+  /* Spacing */
+  --space-xs:   0.5rem;
+  --space-sm:   1rem;
+  --space-md:   2rem;
+  --space-lg:   4rem;
+  --space-xl:   8rem;
+  --space-2xl:  12rem;
+
+  /* Borders */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-full: 50%;
+
+  /* Glass */
+  --glass-blur:       blur(20px);
+  --glass-blur-heavy: blur(40px);
+
+  /* Shadow */
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md:   0 4px 20px rgba(0,0,0,0.4);
+  --shadow-lg:   0 8px 40px rgba(0,0,0,0.5);
+  --shadow-glow: 0 0 40px rgba(201,168,76,0.15);
+
+  /* Transitions */
+  --ease-smooth:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-bounce:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast:   0.2s;
+  --duration-normal: 0.4s;
+  --duration-slow:   0.8s;
+
+  /* 3D */
+  --perspective:    1200px;
+  --perspective-lg: 2000px;
+
+  /* Z-index */
+  --z-base:    1;
+  --z-above:   10;
+  --z-nav:     100;
+  --z-modal:   500;
+  --z-toast:   1000;
+}
+
+/* ============================================================================
+   RESET & BASE
+   ============================================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: var(--lh-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Hide scrollbar but keep function (Lenis provides custom) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+
+img, video { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+ul, ol { list-style: none; }
+input, textarea, select { font-family: inherit; }
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-bg-primary);
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+
+.t-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+}
+
+.t-body { font-family: var(--font-body); line-height: var(--lh-normal); }
+.t-mono { font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: var(--ls-wide); }
+.t-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.t-gold { color: var(--color-gold); }
+.t-blue { color: var(--color-blue-un); }
+.t-secondary { color: var(--color-text-secondary); }
+
+/* ============================================================================
+   GLASS PANELS
+   ============================================================================ */
+.glass {
+  background: var(--color-bg-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-lg);
+}
+
+.glass-card {
+  background: var(--color-bg-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  transition: border-color var(--duration-normal) var(--ease-smooth),
+              box-shadow var(--duration-normal) var(--ease-smooth),
+              transform var(--duration-normal) var(--ease-smooth);
+}
+
+.glass-card:hover {
+  border-color: rgba(201,168,76,0.2);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ============================================================================
+   3D PERSPECTIVE CONTAINERS
+   ============================================================================ */
+.perspective-container {
+  perspective: var(--perspective);
+  perspective-origin: center center;
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform var(--duration-normal) var(--ease-smooth);
+  will-change: transform;
+}
+
+/* ============================================================================
+   PARALLAX UTILITIES
+   ============================================================================ */
+.parallax-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 120%;
+  will-change: transform;
+}
+
+.parallax-layer--deep { z-index: 0; }
+.parallax-layer--mid  { z-index: 1; }
+.parallax-layer--front { z-index: 2; }
+.parallax-content { position: relative; z-index: 3; }
+
+/* ============================================================================
+   SCROLL-TRIGGERED ANIMATION STATES
+   ============================================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity var(--duration-slow) var(--ease-expo),
+              transform var(--duration-slow) var(--ease-expo);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-80px);
+  transition: opacity var(--duration-slow) var(--ease-expo),
+              transform var(--duration-slow) var(--ease-expo);
+}
+
+.reveal-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity var(--duration-slow) var(--ease-expo),
+              transform var(--duration-slow) var(--ease-expo);
+}
+
+.reveal-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity var(--duration-slow) var(--ease-expo),
+              transform var(--duration-slow) var(--ease-expo);
+}
+
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Mask reveal (text clip) */
+.mask-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.2s var(--ease-expo);
+}
+
+.mask-reveal.is-visible {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* ============================================================================
+   LAYOUT UTILITIES
+   ============================================================================ */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.container--wide { max-width: 1600px; }
+.container--narrow { max-width: 900px; }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-xs { gap: var(--space-xs); }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }
+
+.grid { display: grid; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+.section-padding { padding: var(--space-xl) 0; }
+.section-padding--lg { padding: var(--space-2xl) 0; }
+
+.text-center { text-align: center; }
+
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  padding: 0.9rem 2rem;
+  border-radius: var(--radius-xl);
+  transition: all var(--duration-normal) var(--ease-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+
+.btn:hover::before { opacity: 1; }
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-bright));
+  color: var(--color-bg-primary);
+  border: none;
+}
+
+.btn-gold:hover {
+  box-shadow: 0 0 30px rgba(201,168,76,0.4);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-glass);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+@media (max-width: 1024px) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .container { padding: 0 var(--space-sm); }
+  .section-padding { padding: var(--space-lg) 0; }
+}
+
+/* ============================================================================
+   SECTION DIVIDERS
+   ============================================================================ */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border-glass), transparent);
+  margin: var(--space-lg) 0;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.section-label::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--color-gold);
+}
+
+/* ============================================================================
+   SCROLL INDICATOR
+   ============================================================================ */
+.scroll-indicator {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.5;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+.scroll-indicator__line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--color-gold), transparent);
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* ============================================================================
+   LOADING / PRELOADER
+   ============================================================================ */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--color-bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.preloader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader__text {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  color: var(--color-gold);
+  letter-spacing: var(--ls-ultra);
+}
+
+/* ============================================================================
+   ORGAN COLOR ACCENTS
+   ============================================================================ */
+[data-organ="GA"]  { --organ-color: #4b9cd3; }
+[data-organ="SC"]  { --organ-color: #e85555; }
+[data-organ="ECOSOC"] { --organ-color: #3ecfb4; }
+[data-organ="ICJ"] { --organ-color: #c9a84c; }
+[data-organ="SEC"] { --organ-color: #a78bfa; }
+[data-organ="TC"]  { --organ-color: #f59e0b; }

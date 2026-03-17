@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECOSOC | United Nations Workflow System</title>
+  <meta name="description" content="Economic and Social Council — Coordination of economic, social, and environmental policies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/organ-page.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%23c9a84c' stroke-width='2'/%3E%3Ctext x='16' y='21' text-anchor='middle' fill='%23c9a84c' font-size='14' font-family='serif' font-weight='bold'%3EUN%3C/text%3E%3C/svg%3E">
+</head>
+<body data-organ="ECOSOC">
+  <nav class="nav is-scrolled" id="main-nav">
+    <div class="nav__inner">
+      <a href="../index.html" class="nav__logo"><div class="nav__logo-icon">UN</div><div><div class="nav__logo-text">United Nations</div><div class="nav__logo-sub">Workflow System</div></div></a>
+      <div class="nav__links">
+        <a href="../index.html" class="nav__link">Home</a>
+        <a href="general-assembly.html" class="nav__link">GA</a>
+        <a href="security-council.html" class="nav__link">SC</a>
+        <a href="ecosoc.html" class="nav__link active">ECOSOC</a>
+        <a href="icj.html" class="nav__link">ICJ</a>
+        <a href="secretariat.html" class="nav__link">Secretariat</a>
+        <a href="trusteeship.html" class="nav__link">TC</a>
+      </div>
+      <button class="nav__hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+    <div class="nav__mobile-menu" id="mobile-menu">
+      <a href="../index.html" class="nav__mobile-link">← Home</a>
+      <a href="general-assembly.html" class="nav__mobile-link">General Assembly</a>
+      <a href="security-council.html" class="nav__mobile-link">Security Council</a>
+      <a href="ecosoc.html" class="nav__mobile-link">ECOSOC</a>
+      <a href="icj.html" class="nav__mobile-link">ICJ</a>
+      <a href="secretariat.html" class="nav__mobile-link">Secretariat</a>
+      <a href="trusteeship.html" class="nav__mobile-link">Trusteeship Council</a>
+    </div>
+  </nav>
+
+  <section class="organ-hero">
+    <div class="organ-hero__bg">
+      <img src="../images/ecosoc.png" alt="Economic and Social Development" loading="eager">
+      <div class="organ-hero__overlay"></div>
+    </div>
+    <div class="container organ-hero__content">
+      <a href="../index.html" class="back-link">← Back to Home</a>
+      <div class="organ-hero__code">ECOSOC · 54 Member States · New York</div>
+      <h1 class="organ-hero__title">Economic & Social Council</h1>
+      <p class="organ-hero__desc">
+        The principal body for coordination, policy review, and recommendations on economic, social, and environmental issues, including implementation of the Sustainable Development Goals.
+      </p>
+    </div>
+  </section>
+
+  <section style="background: var(--color-bg-secondary); padding: var(--space-lg) 0;">
+    <div class="container">
+      <div class="info-grid reveal">
+        <div class="info-card">
+          <div class="info-card__label">Active Decisions</div>
+          <div class="info-card__value">1</div>
+          <div class="info-card__detail">SDG Review under deliberation</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card__label">Status</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">Under Review</div>
+          <div class="info-card__detail">2024 Session</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card__label">Focus Area</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">SDGs</div>
+          <div class="info-card__detail">Sustainable Development Goals</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="organ-content">
+    <div class="container">
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">Current Decisions</h2>
+        </div>
+        <div class="glass-card reveal">
+          <div class="t-mono" style="color: var(--color-teal); margin-bottom: 0.5rem;">ECOSOC/DEC/2024/201</div>
+          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Sustainable Development Goals Review</h3>
+          <p class="t-secondary" style="margin-bottom: var(--space-sm);">
+            Reviews progress on SDGs and recommends accelerated action across all member nations. 
+            Submitted by Ambassador Ruchira Kamboj (India) during the 2024 session.
+          </p>
+          <div class="flex gap-sm" style="flex-wrap: wrap;">
+            <span class="badge badge--pending">Under Review</span>
+            <span class="badge badge--active">High Priority</span>
+            <span class="badge badge--closed">Requires Voting</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container"><div class="footer__bottom">
+      <span class="footer__copyright">© 2024 UN Workflow Management System</span>
+      <a href="../index.html" class="back-link">← Back to Home</a>
+    </div></div>
+  </footer>
+
+  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>
