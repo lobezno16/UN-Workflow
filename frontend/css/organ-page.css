@@ -8,6 +8,7 @@
   min-height: 60vh;
   display: flex;
   align-items: flex-end;
+  padding-top: 5rem;
   padding-bottom: var(--space-xl);
   overflow: hidden;
   background: var(--color-bg-primary);
