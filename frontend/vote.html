@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delegate Voting Portal — UN Workflow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+  <style>
+    :root{--gold:#c9a84c;--gold-dim:rgba(201,168,76,.15);--gold-border:rgba(201,168,76,.25);
+      --bg:#07090f;--bg2:#0d1117;--surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);
+      --text:#e8e0d0;--muted:rgba(232,224,208,.5);--red:#e05c5c;--green:#5ce07f;--yellow:#e0c05c}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+    /* NAV */
+    .nav{background:rgba(13,17,23,.95);border-bottom:1px solid var(--border);padding:.9rem 2rem;
+      display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+    .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+    .nav-logo-icon{width:36px;height:36px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--gold);font-family:'EB Garamond',serif;font-weight:600}
+    .nav-logo-text{font-size:.75rem;font-weight:600;color:var(--text)}
+    .nav-logo-sub{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .nav-right{display:flex;align-items:center;gap:1rem}
+    .nav-badge{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:8px;padding:.3rem .8rem;font-size:.78rem;color:var(--gold)}
+    .btn-sm{padding:.4rem .9rem;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Outfit',sans-serif;font-size:.78rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+    .btn-sm:hover{border-color:var(--gold-border);color:var(--gold)}
+
+    /* LAYOUT */
+    .main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+    .grid{display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+    /* MATTER CARD */
+    .matter-card{background:rgba(13,17,23,.9);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+    .matter-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+    .matter-badge{display:inline-block;padding:.25rem .7rem;border-radius:8px;font-size:.7rem;font-weight:600;letter-spacing:.06em}
+    .badge-ga{background:rgba(92,158,224,.15);color:#5c9ee0;border:1px solid rgba(92,158,224,.3)}
+    .badge-sc{background:rgba(224,92,92,.15);color:var(--red);border:1px solid rgba(224,92,92,.3)}
+    .badge-voting{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border);animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+    .matter-number{font-size:.72rem;color:var(--muted);margin-bottom:.35rem}
+    .matter-title{font-size:1.25rem;font-weight:600;line-height:1.4;margin-bottom:.5rem}
+    .matter-desc{font-size:.83rem;color:var(--muted);line-height:1.6}
+    .threshold-note{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:8px;padding:.3rem .75rem;margin-top:.75rem}
+
+    /* VOTED STATE */
+    .already-voted{background:rgba(92,224,127,.08);border:1px solid rgba(92,224,127,.25);border-radius:12px;padding:1rem 1.25rem;text-align:center;margin-bottom:1.25rem}
+    .already-voted-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+    .already-voted-value{font-size:1.4rem;font-weight:700}
+    .voted-yes{color:var(--green)}.voted-no{color:var(--red)}.voted-abs{color:var(--yellow)}
+
+    /* VOTING BOOTH */
+    .booth{background:rgba(13,17,23,.9);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+    .booth-title{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:1.25rem}
+    .vote-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+    .vote-btn{padding:1.1rem .5rem;border-radius:12px;border:2px solid transparent;background:var(--surface);
+      color:var(--text);font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;
+      transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+    .vote-btn .icon{font-size:1.6rem}
+    .vote-btn:hover:not(:disabled){transform:translateY(-2px)}
+    .vote-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+    .btn-yes:hover:not(:disabled){background:rgba(92,224,127,.15);border-color:rgba(92,224,127,.5);color:var(--green)}
+    .btn-no:hover:not(:disabled){background:rgba(224,92,92,.15);border-color:rgba(224,92,92,.5);color:var(--red)}
+    .btn-abs:hover:not(:disabled){background:rgba(224,192,92,.15);border-color:rgba(224,192,92,.5);color:var(--yellow)}
+    .btn-yes.selected{background:rgba(92,224,127,.2);border-color:var(--green);color:var(--green)}
+    .btn-no.selected{background:rgba(224,92,92,.2);border-color:var(--red);color:var(--red)}
+    .btn-abs.selected{background:rgba(224,192,92,.2);border-color:var(--yellow);color:var(--yellow)}
+
+    /* TALLY */
+    .tally-card{background:rgba(13,17,23,.9);border:1px solid var(--border);border-radius:16px;padding:1.25rem;margin-bottom:1.25rem}
+    .tally-title{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:1rem}
+    .tally-counts{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1rem;text-align:center}
+    .tally-num{font-size:1.8rem;font-weight:700;line-height:1}
+    .tally-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem}
+    .tally-bar{height:10px;background:var(--surface);border-radius:6px;overflow:hidden;display:flex;gap:2px;margin-bottom:.5rem}
+    .tally-yes{background:var(--green);transition:width .6s ease}
+    .tally-no{background:var(--red);transition:width .6s ease}
+    .tally-abs{background:var(--yellow);transition:width .6s ease}
+    .tally-threshold{font-size:.72rem;color:var(--muted);text-align:right}
+    .tally-threshold span{color:var(--gold)}
+
+    /* TX LOG */
+    .txlog-card{background:#050709;border:1px solid var(--border);border-radius:16px;padding:1.25rem;font-family:'Courier New',monospace}
+    .txlog-title{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.75rem;font-family:'Outfit',sans-serif}
+    .txlog-body{max-height:260px;overflow-y:auto;font-size:.72rem;line-height:1.7}
+    .tx-line{padding:.1rem 0;border-bottom:1px solid rgba(255,255,255,.03)}
+    .tx-ts{color:rgba(232,224,208,.3);margin-right:.5rem}
+    .tx-lock{color:#c9a84c}.tx-ok{color:var(--green)}.tx-err{color:var(--red)}.tx-wait{color:var(--yellow)}.tx-info{color:#5c9ee0}
+
+    /* NO MATTERS */
+    .no-matters{text-align:center;padding:4rem 2rem;color:var(--muted)}
+    .no-matters h2{font-size:1.2rem;margin-bottom:.5rem;color:var(--text)}
+
+    /* MATTER SELECTOR */
+    .matter-selector{background:rgba(13,17,23,.9);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+    .matter-selector label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+    .matter-select{flex:1;padding:.5rem .75rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.85rem;min-width:200px}
+    .matter-select:focus{outline:none;border-color:var(--gold-border)}
+
+    /* RACE DEMO BANNER */
+    .race-banner{background:rgba(201,168,76,.08);border:1px solid var(--gold-border);
+      border-radius:12px;padding:.85rem 1.1rem;margin-bottom:1.25rem;display:none}
+    .race-banner.show{display:block}
+    .race-banner-title{font-size:.72rem;font-weight:700;text-transform:uppercase;
+      letter-spacing:.08em;color:var(--gold);margin-bottom:.35rem}
+    .race-banner p{font-size:.78rem;color:var(--muted);line-height:1.5;margin:0}
+    .race-banner code{color:var(--gold);font-size:.7rem}
+
+    /* RACE OUTCOME */
+    .race-won{background:rgba(92,224,127,.1);border:1px solid rgba(92,224,127,.3);
+      border-radius:10px;padding:.75rem 1rem;margin-bottom:.75rem;display:none}
+    .race-won.show{display:block}
+    .race-won-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--green);font-weight:700}
+    .race-won p{font-size:.8rem;color:var(--text);margin:.2rem 0 0}
+
+    .race-lost{background:rgba(224,92,92,.08);border:1px solid rgba(224,92,92,.3);
+      border-radius:10px;padding:.75rem 1rem;margin-bottom:.75rem;display:none}
+    .race-lost.show{display:block}
+    .race-lost-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--red);font-weight:700}
+    .race-lost p{font-size:.8rem;color:var(--muted);margin:.2rem 0 0}
+
+    .toast{position:fixed;bottom:2rem;right:2rem;background:rgba(13,17,23,.97);border:1px solid var(--gold-border);border-radius:12px;padding:.85rem 1.25rem;font-size:.82rem;color:var(--text);z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.5);transform:translateY(80px);opacity:0;transition:all .3s;max-width:320px}
+    .toast.show{transform:translateY(0);opacity:1}
+    .toast.error{border-color:rgba(224,92,92,.4);color:var(--red)}
+
+    /* DELEGATE CHIP */
+    .delegate-chip{display:flex;align-items:center;gap:.6rem;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:10px;padding:.4rem .85rem;font-size:.78rem}
+    .delegate-chip .flag{font-size:1.1rem}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon">UN</div>
+    <div><div class="nav-logo-text">United Nations</div><div class="nav-logo-sub">Delegate Portal</div></div>
+  </a>
+  <div class="nav-right">
+    <div class="delegate-chip">
+      <span class="flag" id="del-flag">🌐</span>
+      <span id="del-name">Loading…</span>
+    </div>
+    <span class="nav-badge" id="del-organ">—</span>
+    <button class="btn-sm" onclick="Auth.logout()">Sign Out</button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<main class="main">
+  <!-- Matter selector (if multiple IN_VOTING) -->
+  <div class="matter-selector" id="matter-selector" style="display:none">
+    <label>Active Matter:</label>
+    <select class="matter-select" id="matter-select" onchange="loadMatter(this.value)"></select>
+  </div>
+
+  <div id="no-matters" class="no-matters" style="display:none">
+    <h2>No Active Votes</h2>
+    <p>There are no matters currently open for voting in your organ. Check back later or contact the administrator.</p>
+  </div>
+
+  <div id="vote-ui" style="display:none">
+    <div class="grid">
+      <!-- LEFT: Matter info + voting booth -->
+      <div>
+        <!-- Matter info -->
+        <div class="matter-card">
+          <div class="matter-header">
+            <div>
+              <div id="m-badge"></div>
+              <div class="matter-number" id="m-number"></div>
+              <div class="matter-title" id="m-title"></div>
+            </div>
+            <span class="matter-badge badge-voting">IN VOTING</span>
+          </div>
+          <div class="matter-desc" id="m-desc"></div>
+          <div><span class="threshold-note" id="m-threshold">⚖️ Threshold: —</span></div>
+        </div>
+
+
+        <!-- Race outcome panels -->
+        <div class="race-won" id="race-won">
+          <div class="race-won-label">🏆 You Won the Race!</div>
+          <p id="race-won-msg">Your transaction acquired the lock first. Vote committed.</p>
+        </div>
+        <div class="race-lost" id="race-lost">
+          <div class="race-lost-label">🔒 Lock Conflict — Country Already Voted</div>
+          <p id="race-lost-msg">Another representative from your country acquired the row lock first.</p>
+        </div>
+
+        <!-- Already voted notice -->
+
+        <div id="voted-notice" style="display:none" class="already-voted">
+          <div class="already-voted-label">Your delegation has voted</div>
+          <div class="already-voted-value" id="voted-value">—</div>
+        </div>
+
+        <!-- Voting booth -->
+        <div class="booth" id="voting-booth">
+          <div class="booth-title">Cast Your Vote — <span id="booth-state">—</span></div>
+          <div class="vote-btns">
+            <button class="vote-btn btn-yes" id="btn-yes" onclick="castVote('YES')">
+              <span class="icon">✅</span>YES — In Favour
+            </button>
+            <button class="vote-btn btn-no" id="btn-no" onclick="castVote('NO')">
+              <span class="icon">❌</span>NO — Against
+            </button>
+            <button class="vote-btn btn-abs" id="btn-abs" onclick="castVote('ABSTAIN')">
+              <span class="icon">🟡</span>ABSTAIN
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Live tally + TX log -->
+      <div>
+        <div class="tally-card">
+          <div class="tally-title">📊 Live Vote Tally</div>
+          <div class="tally-counts">
+            <div><div class="tally-num" id="t-yes" style="color:var(--green)">0</div><div class="tally-lbl">Yes</div></div>
+            <div><div class="tally-num" id="t-no" style="color:var(--red)">0</div><div class="tally-lbl">No</div></div>
+            <div><div class="tally-num" id="t-abs" style="color:var(--yellow)">0</div><div class="tally-lbl">Abstain</div></div>
+          </div>
+          <div class="tally-bar">
+            <div class="tally-yes" id="tbar-yes" style="width:0%"></div>
+            <div class="tally-no" id="tbar-no" style="width:0%"></div>
+            <div class="tally-abs" id="tbar-abs" style="width:0%"></div>
+          </div>
+          <div class="tally-threshold">Required: <span id="t-threshold">50%</span> | Current: <span id="t-current" style="color:var(--gold)">0%</span></div>
+        </div>
+
+        <!-- Transaction Log -->
+        <div class="txlog-card">
+          <div class="txlog-title">🔒 Transaction Log</div>
+          <div class="txlog-body" id="txlog"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="js/auth.js"></script>
+<script>
+if (!Auth.requireAuth('delegate')) throw 0;
+
+const FLAGS = {USA:'🇺🇸',CHN:'🇨🇳',RUS:'🇷🇺',GBR:'🇬🇧',FRA:'🇫🇷',DEU:'🇩🇪',JPN:'🇯🇵',IND:'🇮🇳',BRA:'🇧🇷',NGA:'🇳🇬',ZAF:'🇿🇦',EGY:'🇪🇬',MEX:'🇲🇽',AUS:'🇦🇺',CAN:'🇨🇦',KOR:'🇰🇷',ARG:'🇦🇷',IDN:'🇮🇩'};
+
+const profile = Auth.getProfile();
+const del = profile.delegate;
+let currentMatter = null;
+let myVote = null;
+let pollTimer = null;
+
+function toast(msg,isErr=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast'+(isErr?' error':'')+' show';
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
+
+// ── TX Log helper ──
+function txLog(msg, cls='tx-info') {
+  const ts = new Date().toLocaleTimeString('en-US',{hour12:false});
+  const box = document.getElementById('txlog');
+  const line = document.createElement('div');
+  line.className='tx-line';
+  line.innerHTML=`<span class="tx-ts">[${ts}]</span><span class="${cls}">${msg}</span>`;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+// ── Init delegate info in nav ──
+function initNav() {
+  const flag = FLAGS[del.state_code] || '🌐';
+  document.getElementById('del-flag').textContent = flag;
+  document.getElementById('del-name').textContent = `${del.title||'Ambassador'} ${del.last_name} (${del.state_name})`;
+  document.getElementById('del-organ').textContent = del.organ_code;
+  document.getElementById('booth-state').textContent = del.state_name;
+
+  // Detect if this is an alternate rep (username ends with .2)
+  if (profile.username.endsWith('.2')) {
+    document.getElementById('race-banner').classList.add('show');
+    // Derive primary username: usa.ga.2 → usa.ga
+    const primary = profile.username.replace(/\.2$/, '');
+    document.getElementById('primary-username').textContent = primary;
+  }
+}
+
+// ── Load voting matters for this delegate's organ ──
+async function loadVotingMatters() {
+  try {
+    const res = await Auth.fetch(`/api/matters?status=IN_VOTING&organ=${del.organ_code}`);
+    const matters = await res.json();
+
+    if (!matters.length) {
+      document.getElementById('no-matters').style.display='block';
+      txLog('No active voting matters found for '+del.organ_code, 'tx-info');
+      return;
+    }
+
+    if (matters.length > 1) {
+      document.getElementById('matter-selector').style.display='flex';
+      const sel = document.getElementById('matter-select');
+      sel.innerHTML = matters.map(m=>`<option value="${m.matter_id}">${m.matter_number} — ${m.title.substring(0,50)}</option>`).join('');
+    }
+
+    await loadMatter(matters[0].matter_id);
+  } catch(e) { toast('Failed to load matters: '+e.message, true); }
+}
+
+// ── Load specific matter ──
+async function loadMatter(matterId) {
+  document.getElementById('vote-ui').style.display='block';
+  document.getElementById('no-matters').style.display='none';
+  myVote = null;
+
+  try {
+    // Load matter details
+    const mr = await Auth.fetch(`/api/matters/${matterId}`);
+    const m = await mr.json();
+    currentMatter = m;
+
+    document.getElementById('m-number').textContent = m.matter_number;
+    document.getElementById('m-title').textContent = m.title;
+    document.getElementById('m-desc').textContent = m.description;
+    document.getElementById('m-threshold').textContent = `⚖️ Requires ${m.voting_threshold}% majority to pass`;
+    document.getElementById('t-threshold').textContent = m.voting_threshold + '%';
+
+    const badgeClass = m.organ_code === 'SC' ? 'badge-sc' : 'badge-ga';
+    document.getElementById('m-badge').innerHTML = `<span class="matter-badge ${badgeClass}" style="margin-bottom:.5rem;display:inline-block">${m.organ_code}</span>`;
+
+    txLog(`Loaded matter: ${m.matter_number}`, 'tx-info');
+
+    // Check if already voted
+    await checkExistingVote(matterId);
+    // Load tally
+    await refreshTally(matterId);
+
+    // Start poll
+    clearInterval(pollTimer);
+    pollTimer = setInterval(()=>refreshTally(matterId), 6000);
+
+  } catch(e) { toast('Error loading matter: '+e.message, true); }
+}
+
+// ── Check if this delegate already voted ──
+async function checkExistingVote(matterId) {
+  try {
+    const res = await Auth.fetch(`/api/voting/matter/${matterId}`);
+    const data = await res.json();
+    const myState = del.state_code;
+
+    // Find if our state voted
+    const existing = (data.votes||[]).find(v => v.delegate_id === del.delegate_id);
+    if (existing) {
+      myVote = existing.vote_value;
+      showVotedState(myVote);
+    } else {
+      showVotingBooth();
+    }
+  } catch(e) { showVotingBooth(); }
+}
+
+function showVotedState(vote) {
+  document.getElementById('voted-notice').style.display='block';
+  const cls = {YES:'voted-yes',NO:'voted-no',ABSTAIN:'voted-abs'}[vote]||'';
+  const icons = {YES:'✅ YES — In Favour', NO:'❌ NO — Against', ABSTAIN:'🟡 ABSTAIN'}[vote]||vote;
+  const vv = document.getElementById('voted-value');
+  vv.textContent = icons;
+  vv.className = 'already-voted-value ' + cls;
+  // Disable buttons
+  ['btn-yes','btn-no','btn-abs'].forEach(id=>{
+    const b=document.getElementById(id);b.disabled=true;
+    if(id==='btn-'+vote.toLowerCase()) b.classList.add('selected');
+  });
+  txLog(`Your state has already voted: ${vote}`, 'tx-ok');
+}
+
+function showVotingBooth() {
+  document.getElementById('voted-notice').style.display='none';
+  ['btn-yes','btn-no','btn-abs'].forEach(id=>{
+    const b=document.getElementById(id);
+    b.disabled=false;
+    b.classList.remove('selected');
+  });
+}
+
+// ── Refresh live tally ──
+async function refreshTally(matterId) {
+  try {
+    const res = await Auth.fetch(`/api/voting/matter/${matterId||currentMatter?.matter_id}`);
+    const data = await res.json();
+    const s = data.summary || {};
+    const yes=s.yes_votes||0, no=s.no_votes||0, abs=s.abstentions||0;
+    const total = yes+no+abs || 1;
+    const yp=(yes/total*100), np=(no/total*100), ap=(abs/total*100);
+    const votingTotal = yes+no || 1;
+    const yesPct = (yes/votingTotal*100).toFixed(1);
+
+    document.getElementById('t-yes').textContent=yes;
+    document.getElementById('t-no').textContent=no;
+    document.getElementById('t-abs').textContent=abs;
+    document.getElementById('tbar-yes').style.width=yp+'%';
+    document.getElementById('tbar-no').style.width=np+'%';
+    document.getElementById('tbar-abs').style.width=ap+'%';
+    document.getElementById('t-current').textContent=yesPct+'%';
+  } catch{}
+}
+
+// ── Cast vote ──
+async function castVote(value) {
+  if (!currentMatter) return;
+  const voteStartTime = Date.now();
+  const buttons = ['btn-yes','btn-no','btn-abs'];
+  buttons.forEach(id=>document.getElementById(id).disabled=true);
+
+  txLog(`BEGIN TRANSACTION;`, 'tx-info');
+  txLog(`SELECT status FROM matter WHERE matter_id=${currentMatter.matter_id} FOR UPDATE;`, 'tx-lock');
+
+  await sleep(300);
+  txLog(`🔒 Row lock acquired on matter_id=${currentMatter.matter_id}`, 'tx-lock');
+  await sleep(200);
+  txLog(`SELECT vote_id FROM vote WHERE matter_id=${currentMatter.matter_id} AND state_id=? FOR UPDATE;`, 'tx-lock');
+  await sleep(200);
+  txLog(`🔍 Checking: has ${del.state_name} already voted? ...`, 'tx-wait');
+  await sleep(300);
+
+  try {
+    // Resolve our state_id from eligible voters list
+    const eligRes = await Auth.fetch(`/api/voting/matter/${currentMatter.matter_id}/eligible`);
+    const elig = await eligRes.json();
+    const myElig = elig.find(e => e.delegate_id === del.delegate_id);
+
+    if (!myElig) {
+      throw new Error('Your delegation is not eligible to vote on this matter, or has already voted.');
+    }
+
+    txLog(`Eligible voter found: state_id=${myElig.state_id} (${del.state_name})`, 'tx-info');
+
+    const res = await Auth.fetch('/api/voting', {
+      method: 'POST',
+      body: JSON.stringify({
+        matter_id: currentMatter.matter_id,
+        state_id: myElig.state_id,
+        delegate_id: del.delegate_id,
+        vote_value: value
+      })
+    });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error);
+
+    txLog(`INSERT INTO vote (matter_id, state_id, delegate_id, vote_value) VALUES (${currentMatter.matter_id}, ?, ${del.delegate_id}, '${value}');`, 'tx-info');
+    await sleep(200);
+    txLog(`COMMIT; ✅ Vote committed successfully`, 'tx-ok');
+
+    // Show race-won if this is an alternate delegate who beat the primary
+    if (profile.username.endsWith('.2')) {
+      const elapsed = Date.now() - voteStartTime;
+      document.getElementById('race-won').classList.add('show');
+      document.getElementById('race-won-msg').textContent =
+        `Your transaction acquired the FOR UPDATE row lock first (committed in ${elapsed}ms). The primary representative's vote will now be blocked by the duplicate check.`;
+      txLog(`🏆 RACE WON: Your transaction committed first in ${elapsed}ms.`, 'tx-ok');
+    }
+
+    toast(`Vote cast: ${value}`);
+
+    myVote = value;
+    showVotedState(value);
+    await refreshTally(currentMatter.matter_id);
+
+  } catch(e) {
+    txLog(`ROLLBACK; ❌ ${e.message}`, 'tx-err');
+
+    const isDuplicate = e.message.toLowerCase().includes('already voted') ||
+                        e.message.toLowerCase().includes('eligible');
+
+    if (isDuplicate && profile.username.endsWith('.2')) {
+      // Race condition — country lock was acquired by the other rep
+      const elapsed = Date.now() - voteStartTime;
+      document.getElementById('race-lost').classList.add('show');
+      document.getElementById('race-lost-msg').textContent =
+        `The primary representative from ${del.state_name} acquired the row-level lock ${elapsed}ms before your transaction could commit. MySQL serialized both requests — only one INSERT succeeded. This demonstrates FOR UPDATE locking preventing duplicate votes.`;
+      txLog(`💥 LOCK CONFLICT: ${del.state_name} already voted. Your transaction was queued and then rejected.`, 'tx-err');
+    } else if (isDuplicate) {
+      document.getElementById('race-lost').classList.add('show');
+      document.getElementById('race-lost-msg').textContent =
+        `Your country (${del.state_name}) has already voted on this matter. Each country may only cast one vote per resolution.`;
+      txLog(`🔒 Duplicate blocked by FOR UPDATE lock check.`, 'tx-err');
+    } else {
+      toast(e.message, true);
+    }
+
+    if (!myVote) showVotingBooth();
+  }
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+initNav();
+loadVotingMatters();
+</script>
+</body>
+</html>

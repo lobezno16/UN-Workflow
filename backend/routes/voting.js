@@ -5,6 +5,7 @@
 const express = require('express');
 const router = express.Router();
 const { query, withTransaction, pool } = require('../config/db');
+const { requireAuth, requireAdmin, requireDelegate } = require('../middleware/auth');
 
 // GET vote summary for a matter
 router.get('/matter/:matterId', async (req, res) => {
@@ -47,11 +48,16 @@ router.get('/matter/:matterId', async (req, res) => {
     }
 });
 
-// POST cast a vote (with concurrency protection)
-router.post('/', async (req, res) => {
+// POST cast a vote (with concurrency protection) — delegate auth required
+router.post('/', requireAuth, requireDelegate, async (req, res) => {
     try {
         const result = await withTransaction(async (connection) => {
             const { matter_id, state_id, delegate_id, vote_value } = req.body;
+
+            // Security: delegate can only vote as themselves
+            if (req.user.delegate_id !== delegate_id) {
+                throw new Error('You can only cast votes on behalf of your own delegation.');
+            }
 
             // Lock the matter row to check status
             const [[matter]] = await connection.execute(
@@ -91,8 +97,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT invalidate a vote
-router.put('/:voteId/invalidate', async (req, res) => {
+// PUT invalidate a vote — admin only
+router.put('/:voteId/invalidate', requireAuth, requireAdmin, async (req, res) => {
     try {
         const { reason } = req.body;
         await query(`
@@ -106,8 +112,8 @@ router.put('/:voteId/invalidate', async (req, res) => {
     }
 });
 
-// POST compute vote outcome and potentially create resolution
-router.post('/matter/:matterId/compute', async (req, res) => {
+// POST compute vote outcome and potentially create resolution — admin only
+router.post('/matter/:matterId/compute', requireAuth, requireAdmin, async (req, res) => {
     try {
         const result = await withTransaction(async (connection) => {
             const matterId = req.params.matterId;
@@ -222,6 +228,47 @@ router.get('/matter/:matterId/eligible', async (req, res) => {
             ORDER BY ms.state_name
         `, [req.params.matterId, req.params.matterId]);
         res.json(eligible);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ============================================================================
+// DEMO-ONLY: DELETE — Reset all votes for a matter (admin only)
+// Resets matter to IN_VOTING so the demo can be run again cleanly
+// ============================================================================
+router.delete('/matter/:matterId/reset', requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const matterId = req.params.matterId;
+
+        // Verify matter exists and is voteable
+        const [matter] = await query(
+            'SELECT matter_id, title, status, requires_voting FROM matter WHERE matter_id = ?',
+            [matterId]
+        );
+        if (!matter) {
+            return res.status(404).json({ error: 'Matter not found.' });
+        }
+        if (!matter.requires_voting) {
+            return res.status(400).json({ error: 'This matter does not require voting.' });
+        }
+
+        await withTransaction(async (connection) => {
+            // Delete all votes for this matter
+            await connection.execute('DELETE FROM vote WHERE matter_id = ?', [matterId]);
+            // Reset matter status to IN_VOTING
+            await connection.execute(
+                "UPDATE matter SET status = 'IN_VOTING', actual_completion_date = NULL WHERE matter_id = ?",
+                [matterId]
+            );
+            // Delete resolution if it was already created
+            await connection.execute('DELETE FROM resolution WHERE matter_id = ?', [matterId]);
+        });
+
+        res.json({
+            success: true,
+            message: `Votes reset for matter: "${matter.title}". Status restored to IN_VOTING.`
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

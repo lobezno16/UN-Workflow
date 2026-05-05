@@ -5,6 +5,9 @@
 const express = require('express');
 const router = express.Router();
 const { query, withTransaction, pool } = require('../config/db');
+const { requireAuth, requireAdmin } = require('../middleware/auth');
+console.log('[matters.js] MODULE LOADED v7 from:', __filename);
+
 
 // GET all matters with filtering
 router.get('/', async (req, res) => {
@@ -107,77 +110,9 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// POST create new matter
-router.post('/', async (req, res) => {
-    try {
-        const result = await withTransaction(async (connection) => {
-            const { title, description, matter_type, organ_id, submitted_by_delegate_id, priority } = req.body;
 
-            // Get organ code for matter number generation
-            const [[organ]] = await connection.execute(
-                'SELECT organ_code FROM un_organ WHERE organ_id = ?',
-                [organ_id]
-            );
-
-            // Generate matter number
-            const [[{ next_id }]] = await connection.execute(
-                'SELECT COALESCE(MAX(matter_id), 0) + 1 AS next_id FROM matter'
-            );
-
-            const year = new Date().getFullYear();
-            let matter_number;
-            let requires_voting = false;
-
-            switch (organ.organ_code) {
-                case 'GA':
-                    matter_number = `GA/PROP/${year}/${String(next_id).padStart(3, '0')}`;
-                    requires_voting = true;
-                    break;
-                case 'SC':
-                    matter_number = `SC/PROP/${year}/${String(next_id).padStart(3, '0')}`;
-                    requires_voting = true;
-                    break;
-                case 'ECOSOC':
-                    matter_number = `E/PROP/${year}/${String(next_id).padStart(3, '0')}`;
-                    requires_voting = true;
-                    break;
-                default:
-                    matter_number = `${organ.organ_code}/${year}/${String(next_id).padStart(3, '0')}`;
-            }
-
-            // Insert matter
-            const [insertResult] = await connection.execute(`
-                INSERT INTO matter (
-                    matter_number, title, description, matter_type, organ_id,
-                    submitted_by_delegate_id, priority, status, submission_date, requires_voting
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, 'SUBMITTED', CURDATE(), ?)
-            `, [matter_number, title, description, matter_type, organ_id, submitted_by_delegate_id, priority, requires_voting]);
-
-            const matter_id = insertResult.insertId;
-
-            // Create workflow stages
-            const stages = requires_voting
-                ? ['SUBMISSION', 'INITIAL_REVIEW', 'COMMITTEE_REVIEW', 'APPROVAL', 'VOTING', 'RESOLUTION_ISSUANCE']
-                : ['SUBMISSION', 'REVIEW', 'APPROVAL', 'ISSUANCE'];
-
-            for (let i = 0; i < stages.length; i++) {
-                await connection.execute(`
-                    INSERT INTO matter_workflow (matter_id, stage_number, stage_name, stage_status)
-                    VALUES (?, ?, ?, ?)
-                `, [matter_id, i + 1, stages[i], i === 0 ? 'IN_PROGRESS' : 'PENDING']);
-            }
-
-            return { matter_id, matter_number };
-        });
-
-        res.status(201).json(result);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// PUT update matter status
-router.put('/:id/status', async (req, res) => {
+// PUT update matter status — admin only
+router.put('/:id/status', requireAuth, requireAdmin, async (req, res) => {
     try {
         const { status } = req.body;
         await query(
@@ -278,6 +213,111 @@ router.get('/:id/timeline', async (req, res) => {
 
         res.json(timeline);
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// POST create a new matter (admin only)
+router.post('/', requireAuth, requireAdmin, async (req, res) => {
+    const fs = require('fs');
+    const os = require('os');
+    const logFile = require('path').join(os.tmpdir(), 'matter_debug.txt');
+    const log = msg => { try { fs.appendFileSync(logFile, msg + '\n'); } catch(e){} };
+    log('=== POST /api/matters ===');
+    try {
+        const {
+            matter_number, title, description, organ_code,
+            matter_type, priority, voting_threshold,
+            session_number, agenda_item_number, submission_date
+        } = req.body;
+
+        log('body: ' + JSON.stringify(req.body));
+
+
+        if (!matter_number || !title || !organ_code) {
+            return res.status(400).json({ error: 'matter_number, title, and organ_code are required.' });
+        }
+
+        // Block Trusteeship Council
+        if (organ_code.toUpperCase() === 'TC') {
+            return res.status(403).json({ error: 'Matters cannot be created for the Trusteeship Council.' });
+        }
+
+        // Resolve organ_id
+        log('querying organ...');
+        const [organ] = await query('SELECT organ_id FROM un_organ WHERE organ_code = ?', [organ_code.toUpperCase()]);
+        log('organ: ' + JSON.stringify(organ));
+        if (!organ) return res.status(404).json({ error: `Organ '${organ_code}' not found.` });
+
+        // Null-safe helpers
+        const safeStr = (v, fallback = null) =>
+            (v === undefined || v === null || v === '') ? fallback : String(v);
+        const safeInt = (v, def = null) => {
+            if (v === null || v === undefined || v === '') return def;
+            const n = parseInt(v, 10);
+            return isNaN(n) ? def : n;
+        };
+
+        // ICJ cases are adjudicated by judges — threshold is NULL/not applicable
+        const isICJ = organ_code.toUpperCase() === 'ICJ';
+        const threshold = isICJ ? null : safeInt(voting_threshold, 50);
+        log('threshold: ' + threshold + ' isICJ: ' + isICJ);
+
+        // Satisfy chk_submitter constraint — attribute to first Secretariat officer
+        log('querying officer...');
+        const [officer] = await query('SELECT officer_id FROM officer ORDER BY officer_id ASC LIMIT 1');
+        log('officer: ' + JSON.stringify(officer));
+        const officerId = officer ? officer.officer_id : null;
+
+        // Only allow ENUM-valid values
+        const VALID_TYPES = ['RESOLUTION', 'CASE', 'DIRECTIVE', 'CIRCULAR', 'OVERSIGHT_REPORT', 'DECISION'];
+        const VALID_PRIOS = ['LOW', 'MEDIUM', 'HIGH', 'URGENT', 'CRITICAL'];
+        const resolvedType = VALID_TYPES.includes(matter_type) ? matter_type : 'RESOLUTION';
+        const resolvedPrio = VALID_PRIOS.includes(priority)    ? priority    : 'MEDIUM';
+
+        // description is NOT NULL in schema — use fallback string
+        const safeDesc = safeStr(description, '(No description provided)');
+
+        const sqlParams = [
+            safeStr(matter_number),
+            safeStr(title),
+            safeDesc,
+            organ.organ_id,
+            resolvedType,
+            resolvedPrio,
+            threshold,
+            officerId,
+            safeStr(session_number),
+            safeStr(agenda_item_number),
+            safeStr(submission_date) || new Date().toISOString().slice(0, 10)
+        ];
+
+        log('sqlParams: ' + JSON.stringify(sqlParams));
+        sqlParams.forEach((p, i) => { if (p === undefined) log('  !! UNDEFINED at index ' + i); });
+
+        // Nuclear safety net: undefined → null so mysql2 never rejects
+        const cleanParams = sqlParams.map(p => p === undefined ? null : p);
+        log('cleanParams: ' + JSON.stringify(cleanParams));
+
+        // Use pool.query (text protocol)
+        log('about to pool.query...');
+        const [result] = await pool.query(
+            `INSERT INTO matter
+               (matter_number, title, description, organ_id, matter_type, priority,
+                voting_threshold, submitted_by_officer_id,
+                session_number, agenda_item_number, submission_date, status)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'SUBMITTED')`,
+            cleanParams
+        );
+        log('INSERT success, id: ' + result.insertId);
+
+        res.status(201).json({ matter_id: result.insertId, message: 'Matter created successfully.' });
+    } catch (error) {
+        log('ERROR: ' + error.message);
+        console.error('[POST /api/matters] ERROR:', error.message);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ error: 'A matter with that number already exists.' });
+        }
         res.status(500).json({ error: error.message });
     }
 });

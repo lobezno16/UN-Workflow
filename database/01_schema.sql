@@ -476,3 +476,32 @@ CREATE INDEX idx_directive_dept ON directive(issuing_department_id);
 -- ============================================================================
 -- END OF SCHEMA
 -- ============================================================================
+
+-- ============================================================================
+-- DISPLAY ALL TABLES CREATED
+-- ============================================================================
+
+SHOW TABLES;
+
+-- Optional: Show structure of all tables (one by one)
+DESCRIBE un_organ;
+DESCRIBE member_state;
+DESCRIBE role;
+DESCRIBE department;
+DESCRIBE officer;
+DESCRIBE delegate;
+DESCRIBE matter;
+DESCRIBE matter_workflow;
+DESCRIBE approval;
+DESCRIBE vote;
+DESCRIBE resolution;
+DESCRIBE icj_judge;
+DESCRIBE icj_case;
+DESCRIBE icj_hearing;
+DESCRIBE icj_judgment;
+DESCRIBE icj_case_judge;
+DESCRIBE directive;
+DESCRIBE directive_acknowledgment;
+DESCRIBE trusteeship_territory;
+DESCRIBE trusteeship_report;
+DESCRIBE audit_log;

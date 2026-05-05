@@ -116,3 +116,39 @@ Open **http://localhost:3000** in your browser.
 - **3D Effects**: CSS `transform-style: preserve-3d` with GSAP-driven mouse-tracking tilt
 - **Particles**: Custom HTML5 Canvas particle system with connecting lines on the hero section
 - **Organ Colors**: Blue (GA), Red (SC), Teal (ECOSOC), Gold (ICJ), Purple (Secretariat), Green (Trusteeship)
+- **Port already in use:** Modify `PORT` in `.env` if 3000 is taken.
+
+## Production Deployment (Render)
+
+This application is configured for a unified full-stack deployment on [Render](https://render.com). The backend Node.js server will automatically serve the frontend static files.
+
+### 1. Deploy the Database
+1. Create a managed MySQL database (e.g., using Aiven, PlanetScale, or a DigitalOcean droplet).
+2. Obtain your database connection credentials (`Host`, `User`, `Password`, `Database Name`, `Port`).
+
+### 2. Deploy the Web Service
+1. Create a new **Web Service** on Render.
+2. Connect your GitHub repository.
+3. Configure the following build settings:
+   - **Build Command**: `npm run install`
+   - **Start Command**: `npm start`
+4. Add the following **Environment Variables**:
+   - `NODE_ENV` = `production`
+   - `DB_HOST` = (Your database host)
+   - `DB_PORT` = 3306
+   - `DB_USER` = (Your database user)
+   - `DB_PASSWORD` = (Your database password)
+   - `DB_NAME` = `un_workflow_db`
+   - `JWT_SECRET` = (A strong random secret string)
+5. Click **Deploy**.
+
+### 3. Initialize the Database
+Once the web service is deployed, you need to run the SQL scripts to create the tables and seed data in your production database:
+1. Go to your Web Service on Render.
+2. Click on the **Shell** tab.
+3. Run the following command:
+   ```bash
+   npm run seed
+   ```
+4. This will execute `backend/scripts/init-db.js`, which securely creates the schema, functions, triggers, and demo users.
+5. You can now log into your live site using the admin credentials (`admin / un_secure_2024`).

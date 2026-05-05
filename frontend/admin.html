@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — UN Workflow System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:#c9a84c; --gold-dim:rgba(201,168,76,.15); --gold-border:rgba(201,168,76,.25);
+      --bg:#07090f; --bg2:#0d1117; --surface:rgba(255,255,255,.04);
+      --border:rgba(255,255,255,.08); --text:#e8e0d0; --muted:rgba(232,224,208,.5);
+      --red:#e05c5c; --green:#5ce07f; --yellow:#e0c05c; --blue:#5c9ee0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+    /* NAV */
+    .nav{background:rgba(13,17,23,.95);border-bottom:1px solid var(--border);padding:.9rem 2rem;
+      display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;
+      backdrop-filter:blur(12px)}
+    .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+    .nav-logo-icon{width:36px;height:36px;border:2px solid var(--gold);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--gold);font-family:'EB Garamond',serif;font-weight:600}
+    .nav-logo-text{font-size:.75rem;font-weight:600;color:var(--text)}
+    .nav-logo-sub{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .nav-right{display:flex;align-items:center;gap:1rem}
+    .nav-user{font-size:.8rem;color:var(--muted)}
+    .nav-user span{color:var(--gold);font-weight:600}
+    .btn-sm{padding:.4rem .9rem;border-radius:8px;border:1px solid var(--border);
+      background:var(--surface);color:var(--text);font-family:'Outfit',sans-serif;
+      font-size:.78rem;cursor:pointer;transition:all .2s}
+    .btn-sm:hover{border-color:var(--gold-border);color:var(--gold)}
+    .btn-gold{background:linear-gradient(135deg,#c9a84c,#a8872e);border:none;
+      color:#07090f;font-weight:700;padding:.4rem 1rem}
+    .btn-gold:hover{opacity:.85;color:#07090f}
+    .btn-red{border-color:rgba(224,92,92,.3);color:var(--red)}
+    .btn-red:hover{background:rgba(224,92,92,.1);border-color:var(--red);color:var(--red)}
+
+    /* LAYOUT */
+    .main{max-width:1300px;margin:0 auto;padding:2rem 1.5rem}
+    .page-title{font-size:1.6rem;font-weight:700;margin-bottom:.3rem}
+    .page-sub{color:var(--muted);font-size:.85rem;margin-bottom:2rem}
+
+    /* TABS */
+    .tabs{display:flex;gap:.5rem;margin-bottom:2rem;border-bottom:1px solid var(--border);padding-bottom:0}
+    .tab-btn{padding:.6rem 1.2rem;border:none;background:none;color:var(--muted);
+      font-family:'Outfit',sans-serif;font-size:.85rem;cursor:pointer;
+      border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+    .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+    /* PANEL */
+    .panel{display:none}.panel.active{display:block}
+
+    /* CARDS GRID */
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.25rem}
+    .card{background:rgba(13,17,23,.8);border:1px solid var(--border);border-radius:14px;padding:1.25rem;
+      transition:border-color .2s}
+    .card:hover{border-color:var(--gold-border)}
+    .card-badge{display:inline-block;padding:.2rem .6rem;border-radius:6px;font-size:.68rem;
+      font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem}
+    .badge-ga{background:rgba(92,158,224,.15);color:var(--blue);border:1px solid rgba(92,158,224,.3)}
+    .badge-sc{background:rgba(224,92,92,.15);color:var(--red);border:1px solid rgba(224,92,92,.3)}
+    .badge-ecosoc{background:rgba(92,224,127,.15);color:var(--green);border:1px solid rgba(92,224,127,.3)}
+    .badge-voting{background:rgba(201,168,76,.15);color:var(--gold);border:1px solid var(--gold-border);animation:pulse 2s infinite}
+    .badge-passed{background:rgba(92,224,127,.15);color:var(--green);border:1px solid rgba(92,224,127,.3)}
+    .badge-rejected{background:rgba(224,92,92,.15);color:var(--red);border:1px solid rgba(224,92,92,.3)}
+    .badge-pending{background:rgba(224,192,92,.15);color:var(--yellow);border:1px solid rgba(224,192,92,.3)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+    .card-number{font-size:.7rem;color:var(--muted);margin-bottom:.3rem}
+    .card-title{font-size:.95rem;font-weight:600;margin-bottom:.75rem;line-height:1.4}
+
+    /* TALLY BAR */
+    .tally{margin-bottom:.75rem}
+    .tally-label{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:.3rem}
+    .tally-bar{height:6px;background:var(--surface);border-radius:4px;overflow:hidden;display:flex;gap:2px}
+    .tally-yes{background:var(--green);border-radius:4px;transition:width .5s ease}
+    .tally-no{background:var(--red);border-radius:4px;transition:width .5s ease}
+    .tally-abs{background:var(--yellow);border-radius:4px;transition:width .5s ease}
+
+    /* CARD ACTIONS */
+    .card-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--border)}
+
+    /* STATUS SELECT */
+    .status-select{padding:.35rem .6rem;background:var(--surface);border:1px solid var(--border);
+      border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.78rem;cursor:pointer}
+    .status-select:focus{outline:none;border-color:var(--gold-border)}
+
+    /* FORM */
+    .form-section{background:rgba(13,17,23,.8);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem}
+    .form-section h3{font-size:.85rem;font-weight:600;color:var(--gold);margin-bottom:1.25rem;text-transform:uppercase;letter-spacing:.07em}
+    .form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+    .form-full{grid-column:1/-1}
+    .form-group{display:flex;flex-direction:column;gap:.4rem}
+    .form-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+    .form-input,.form-select,.form-textarea{background:rgba(255,255,255,.05);border:1px solid var(--border);
+      border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.85rem;padding:.55rem .8rem;
+      transition:border-color .2s;width:100%;color-scheme:dark}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{
+      outline:none;border-color:var(--gold-border);
+      background:rgba(13,17,23,.95);  /* keep dark bg on focus — overrides UA white */
+    }
+    /* Stop browser autofill from painting inputs white */
+    .form-input:-webkit-autofill,.form-input:-webkit-autofill:hover,.form-input:-webkit-autofill:focus,
+    .form-input:-webkit-autofill:active {
+      -webkit-box-shadow:0 0 0 1000px #0d1117 inset !important;
+      -webkit-text-fill-color:var(--text) !important;
+      caret-color:var(--text);
+      background-color:#0d1117 !important;
+    }
+    .form-textarea{resize:vertical;min-height:100px}
+    .form-select option{background:#0d1117}
+    .required{color:var(--red)}
+    .form-hint{font-size:.68rem;color:var(--muted);margin-top:.2rem}
+    .btn-submit{background:linear-gradient(135deg,#c9a84c,#a8872e);border:none;color:#07090f;
+      font-weight:700;padding:.6rem 1.5rem;border-radius:10px;cursor:pointer;
+      font-family:'Outfit',sans-serif;font-size:.85rem;transition:opacity .2s;margin-top:1rem}
+    .btn-submit:hover{opacity:.85}
+    .btn-submit:disabled{opacity:.4;cursor:not-allowed}
+
+    /* ANNOUNCEMENT CARD */
+    .ann-card{background:rgba(13,17,23,.8);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;
+      margin-bottom:.75rem;display:flex;gap:1rem;align-items:flex-start;transition:border-color .2s}
+    .ann-card:hover{border-color:var(--gold-border)}
+    .ann-card.pinned{border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.03)}
+    .ann-body{flex:1}
+    .ann-title{font-size:.9rem;font-weight:600;margin-bottom:.3rem}
+    .ann-meta{font-size:.68rem;color:var(--muted);margin-bottom:.5rem;display:flex;gap:.5rem;flex-wrap:wrap}
+    .ann-content{font-size:.78rem;color:var(--muted);line-height:1.6;
+      display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .ann-actions{display:flex;gap:.5rem;margin-top:.75rem}
+    .cat-badge{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+      padding:.15rem .5rem;border-radius:20px;border:1px solid}
+    .cat-news{color:#5ca8e0;border-color:rgba(92,168,224,.3);background:rgba(92,168,224,.08)}
+    .cat-update{color:var(--green);border-color:rgba(92,224,127,.3);background:rgba(92,224,127,.08)}
+    .cat-statement{color:var(--gold);border-color:var(--gold-border);background:var(--gold-dim)}
+    .cat-press{color:var(--yellow);border-color:rgba(224,192,92,.3);background:rgba(224,192,92,.08)}
+    .pin-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem}
+
+    /* AUDIT LOG */
+    .audit-table{width:100%;border-collapse:collapse}
+    .audit-table th{text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;
+      color:var(--muted);padding:.5rem .75rem;border-bottom:1px solid var(--border);font-weight:500}
+    .audit-table td{padding:.6rem .75rem;font-size:.8rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:top}
+    .audit-table tr:hover td{background:var(--surface)}
+    .action-badge{display:inline-block;padding:.15rem .5rem;border-radius:5px;font-size:.65rem;
+      font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+    .action-vote{background:rgba(201,168,76,.15);color:var(--gold)}
+    .action-insert{background:rgba(92,158,224,.15);color:var(--blue)}
+    .action-status{background:rgba(92,224,127,.15);color:var(--green)}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:2rem;right:2rem;background:rgba(13,17,23,.97);
+      border:1px solid var(--gold-border);border-radius:12px;padding:.85rem 1.25rem;
+      font-size:.82rem;color:var(--text);z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.5);
+      transform:translateY(80px);opacity:0;transition:all .3s;max-width:340px}
+    .toast.show{transform:translateY(0);opacity:1}
+    .toast.error{border-color:rgba(224,92,92,.4);color:var(--red)}
+
+    /* STAT CARDS */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+    .stat-card{background:rgba(13,17,23,.8);border:1px solid var(--border);border-radius:12px;
+      padding:1.1rem 1.25rem}
+    .stat-card-num{font-size:2rem;font-weight:700;color:var(--gold);line-height:1}
+    .stat-card-label{font-size:.75rem;color:var(--muted);margin-top:.25rem;text-transform:uppercase;letter-spacing:.06em}
+
+    /* EMPTY */
+    .empty{text-align:center;padding:3rem;color:var(--muted);font-size:.9rem}
+
+    /* OUTCOME MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;
+      display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+    .modal-overlay.show{opacity:1;pointer-events:all}
+    .modal{background:#0d1117;border:1px solid var(--border);border-radius:16px;
+      padding:2rem;max-width:480px;width:90%;transform:scale(.95);transition:transform .3s}
+    .modal-overlay.show .modal{transform:scale(1)}
+    .modal h3{font-size:1.15rem;font-weight:600;margin-bottom:.5rem}
+    .modal p{font-size:.83rem;color:var(--muted);margin-bottom:1.25rem;line-height:1.5}
+    .modal-result{text-align:center;padding:1.5rem;border-radius:12px;margin-bottom:1.25rem}
+    .modal-result.passed{background:rgba(92,224,127,.1);border:1px solid rgba(92,224,127,.3)}
+    .modal-result.rejected{background:rgba(224,92,92,.1);border:1px solid rgba(224,92,92,.3)}
+    .modal-result-label{font-size:2rem;font-weight:700;margin-bottom:.25rem}
+    .modal-result.passed .modal-result-label{color:var(--green)}
+    .modal-result.rejected .modal-result-label{color:var(--red)}
+    .modal-result-res{font-size:.8rem;color:var(--muted)}
+    .modal-actions{display:flex;gap:.75rem;justify-content:flex-end}
+
+    @media(max-width:768px){.stats-row{grid-template-columns:repeat(2,1fr)}.cards-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon">UN</div>
+    <div>
+      <div class="nav-logo-text">United Nations</div>
+      <div class="nav-logo-sub">Admin Dashboard</div>
+    </div>
+  </a>
+  <div class="nav-right">
+    <div class="nav-user">Signed in as <span id="nav-username">admin</span></div>
+    <button class="btn-sm" onclick="Auth.logout()">Sign Out</button>
+    <a href="/" class="btn-sm" style="text-decoration:none">← Main Site</a>
+  </div>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- OUTCOME MODAL -->
+<div class="modal-overlay" id="outcome-modal">
+  <div class="modal">
+    <h3>Vote Outcome</h3>
+    <p id="modal-matter-title" style="color:var(--gold);margin-bottom:.75rem"></p>
+    <div class="modal-result" id="modal-result">
+      <div class="modal-result-label" id="modal-outcome">PASSED</div>
+      <div id="modal-vote-counts" style="font-size:.85rem;color:var(--muted);margin:.5rem 0"></div>
+      <div class="modal-result-res" id="modal-resolution"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="page-title">Admin Dashboard</div>
+  <div class="page-sub">Manage matters, voting, and system state.</div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-card-num" id="s-total">—</div><div class="stat-card-label">Total Matters</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="s-voting" style="color:var(--yellow)">—</div><div class="stat-card-label">In Voting</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="s-passed" style="color:var(--green)">—</div><div class="stat-card-label">Passed</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="s-rejected" style="color:var(--red)">—</div><div class="stat-card-label">Rejected</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('voting')">⚡ Active Voting</button>
+    <button class="tab-btn" onclick="switchTab('all')">📋 All Matters</button>
+    <button class="tab-btn" onclick="switchTab('add')">📝 Add Matter</button>
+    <button class="tab-btn" onclick="switchTab('announcements')">📢 Announcements</button>
+    <button class="tab-btn" onclick="switchTab('audit')">📜 Audit Log</button>
+  </div>
+
+  <!-- Panel: Active Voting -->
+  <div class="panel active" id="panel-voting">
+    <div class="cards-grid" id="voting-grid">
+      <div class="empty">Loading active voting matters…</div>
+    </div>
+  </div>
+
+  <!-- Panel: All Matters -->
+  <div class="panel" id="panel-all">
+    <div class="cards-grid" id="all-grid">
+      <div class="empty">Loading…</div>
+    </div>
+  </div>
+
+  <!-- Panel: Add Matter -->
+  <div class="panel" id="panel-add">
+    <div class="form-section">
+      <h3>📝 Create New Matter</h3>
+      <form id="matter-form" onsubmit="submitMatter(event)" autocomplete="off">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Organ <span class="required">*</span></label>
+            <select class="form-select" id="f-organ" required onchange="onOrganChange(this.value)">
+              <option value="">Select organ…</option>
+              <option value="GA">General Assembly (GA)</option>
+              <option value="SC">Security Council (SC)</option>
+              <option value="ECOSOC">ECOSOC</option>
+              <option value="ICJ">International Court of Justice (ICJ)</option>
+              <option value="SEC">Secretariat</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Matter Number <span class="required">*</span></label>
+            <input class="form-input" id="f-number" placeholder="e.g. GA/RES/80/005" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <select class="form-select" id="f-type">
+              <option value="RESOLUTION">Resolution</option>
+              <option value="CASE">Case (ICJ)</option>
+              <option value="DIRECTIVE">Directive</option>
+              <option value="CIRCULAR">Circular</option>
+              <option value="OVERSIGHT_REPORT">Oversight Report</option>
+              <option value="DECISION">Decision</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <select class="form-select" id="f-priority">
+              <option value="MEDIUM">Medium</option>
+              <option value="HIGH">High</option>
+              <option value="CRITICAL">Critical</option>
+              <option value="URGENT">Urgent</option>
+              <option value="LOW">Low</option>
+            </select>
+          </div>
+          <div class="form-group" id="threshold-group">
+            <label class="form-label" id="threshold-label">Voting Threshold (%)</label>
+            <input class="form-input" id="f-threshold" type="number" min="0" max="100" value="50">
+            <span class="form-hint" id="threshold-hint"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Session Number</label>
+            <input class="form-input" id="f-session" placeholder="e.g. 80">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Agenda Item</label>
+            <input class="form-input" id="f-agenda" placeholder="e.g. 22">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Submission Date</label>
+            <input class="form-input" id="f-date" type="date">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Title <span class="required">*</span></label>
+            <input class="form-input" id="f-title" placeholder="Full resolution title…" required>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="f-desc" placeholder="Full text or summary of the matter…" style="min-height:130px"></textarea>
+          </div>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:center;margin-top:1rem">
+          <button type="submit" class="btn-submit" id="submit-matter-btn">➕ Create Matter</button>
+          <span id="matter-form-msg" style="font-size:.8rem;color:var(--muted)"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Panel: Announcements -->
+  <div class="panel" id="panel-announcements">
+    <div class="form-section">
+      <h3>📢 Post New Announcement</h3>
+      <form id="ann-form" onsubmit="submitAnnouncement(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Organ (optional)</label>
+            <select class="form-select" id="a-organ">
+              <option value="">All Organs / General</option>
+              <option value="1">General Assembly</option>
+              <option value="2">Security Council</option>
+              <option value="3">ECOSOC</option>
+              <option value="4">International Court of Justice</option>
+              <option value="5">Secretariat</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-select" id="a-cat">
+              <option value="NEWS">📰 News</option>
+              <option value="UPDATE">🔄 Update</option>
+              <option value="STATEMENT">📣 Statement</option>
+              <option value="PRESS_RELEASE">📋 Press Release</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pin to top?</label>
+            <select class="form-select" id="a-pin">
+              <option value="0">No</option>
+              <option value="1">Yes — Pin</option>
+            </select>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Title <span class="required">*</span></label>
+            <input class="form-input" id="a-title" placeholder="Announcement headline…" required>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Content <span class="required">*</span></label>
+            <textarea class="form-textarea" id="a-content" placeholder="Full announcement text…" style="min-height:120px" required></textarea>
+          </div>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:center;margin-top:1rem">
+          <button type="submit" class="btn-submit" id="submit-ann-btn">📤 Post Announcement</button>
+          <span id="ann-form-msg" style="font-size:.8rem;color:var(--muted)"></span>
+        </div>
+      </form>
+    </div>
+
+    <div id="ann-list"><div class="empty">Loading announcements…</div></div>
+  </div>
+
+  <!-- Panel: Audit Log -->
+  <div class="panel" id="panel-audit">
+    <div class="card" style="overflow-x:auto">
+      <table class="audit-table">
+        <thead>
+          <tr><th>Time</th><th>Action</th><th>Table</th><th>Description</th><th>By</th></tr>
+        </thead>
+        <tbody id="audit-body"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted)">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script src="js/auth.js"></script>
+<script>
+// ── Auth guard ──
+if (!Auth.requireAuth('admin')) throw 0;
+document.getElementById('nav-username').textContent = Auth.getProfile()?.username || 'admin';
+
+const STATUS_OPTIONS = ['SUBMITTED','UNDER_REVIEW','PENDING_APPROVAL','APPROVED','IN_VOTING','PASSED','REJECTED','CLOSED','ARCHIVED'];
+let allMatters = [];
+
+// ── Toast ──
+function toast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr?' error':'') + ' show';
+  setTimeout(()=>t.classList.remove('show'), 4000);
+}
+
+// ── Tab switch ──
+const TAB_NAMES = ['voting','all','add','announcements','audit'];
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active', TAB_NAMES[i]===name);
+  });
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  if (name==='audit') loadAudit();
+  if (name==='announcements') loadAnnouncements();
+}
+
+// ── Badge helpers ──
+function organBadge(code) {
+  const map={GA:'badge-ga',SC:'badge-sc',ECOSOC:'badge-ecosoc'};
+  return `<span class="card-badge ${map[code]||'badge-pending'}">${code}</span>`;
+}
+function statusBadge(s) {
+  const map={IN_VOTING:'badge-voting',PASSED:'badge-passed',REJECTED:'badge-rejected'};
+  const cls=map[s]||'badge-pending';
+  return `<span class="card-badge ${cls}">${s.replace('_',' ')}</span>`;
+}
+
+// ── Tally bar HTML ──
+function tallyBar(summary) {
+  if (!summary) return '';
+  const yes=summary.yes_votes||0, no=summary.no_votes||0, abs=summary.abstentions||0;
+  const total=yes+no+abs||1;
+  const yp=(yes/total*100).toFixed(0), np=(no/total*100).toFixed(0), ap=(abs/total*100).toFixed(0);
+  return `
+    <div class="tally">
+      <div class="tally-label">
+        <span>✅ YES: ${yes}</span><span>❌ NO: ${no}</span><span>🟡 ABS: ${abs}</span>
+        <span style="color:var(--gold)">Threshold: ${summary.voting_threshold||50}%</span>
+      </div>
+      <div class="tally-bar">
+        <div class="tally-yes" style="width:${yp}%"></div>
+        <div class="tally-no" style="width:${np}%"></div>
+        <div class="tally-abs" style="width:${ap}%"></div>
+      </div>
+    </div>`;
+}
+
+// ── Render a matter card ──
+function renderCard(m, summary) {
+  const isVoting = m.status === 'IN_VOTING';
+  return `
+    <div class="card" id="card-${m.matter_id}">
+      <div>${organBadge(m.organ_code)} ${statusBadge(m.status)}</div>
+      <div class="card-number">${m.matter_number}</div>
+      <div class="card-title">${m.title}</div>
+      ${tallyBar(summary)}
+      <div class="card-actions">
+        <select class="status-select" id="sel-${m.matter_id}" onchange="changeStatus(${m.matter_id},this.value)">
+          ${STATUS_OPTIONS.map(s=>`<option value="${s}"${s===m.status?' selected':''}>${s.replace(/_/g,' ')}</option>`).join('')}
+        </select>
+        ${isVoting ? `
+          <button class="btn-sm btn-gold" onclick="computeOutcome(${m.matter_id},'${escHtml(m.title)}')">
+            ⚖️ Finalize
+          </button>
+          <button class="btn-sm btn-red" onclick="resetVotes(${m.matter_id},'${escHtml(m.title)}')">
+            🔄 Reset Votes
+          </button>` : ''}
+      </div>
+    </div>`;
+}
+
+function escHtml(s){ return s.replace(/'/g,"\\'"); }
+
+// ── Load all matters + summaries ──
+async function loadMatters() {
+  try {
+    const res = await Auth.fetch('/api/matters?limit=50');
+    allMatters = await res.json();
+
+    // Stats
+    document.getElementById('s-total').textContent = allMatters.length;
+    document.getElementById('s-voting').textContent = allMatters.filter(m=>m.status==='IN_VOTING').length;
+    document.getElementById('s-passed').textContent = allMatters.filter(m=>m.status==='PASSED').length;
+    document.getElementById('s-rejected').textContent = allMatters.filter(m=>m.status==='REJECTED').length;
+
+    // Voting panel (fetch tallies for IN_VOTING)
+    const votingMatters = allMatters.filter(m=>m.status==='IN_VOTING');
+    const votingGrid = document.getElementById('voting-grid');
+    if (!votingMatters.length) {
+      votingGrid.innerHTML = '<div class="empty">No matters currently in voting. Use the All Matters tab to set a matter to IN_VOTING.</div>';
+    } else {
+      const html = await Promise.all(votingMatters.map(async m => {
+        try {
+          const sr = await Auth.fetch(`/api/voting/matter/${m.matter_id}`);
+          const d = await sr.json();
+          return renderCard(m, d.summary);
+        } catch { return renderCard(m, null); }
+      }));
+      votingGrid.innerHTML = html.join('');
+    }
+
+    // All matters panel (no tallies for perf)
+    document.getElementById('all-grid').innerHTML = allMatters.map(m=>renderCard(m,null)).join('');
+  } catch(e) { toast('Failed to load matters: '+e.message, true); }
+}
+
+// ── Change status ──
+async function changeStatus(matterId, status) {
+  try {
+    const res = await Auth.fetch(`/api/matters/${matterId}/status`, {
+      method:'PUT', body:JSON.stringify({status})
+    });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error);
+    toast(`Status updated → ${status}`);
+    await loadMatters();
+  } catch(e) { toast('Error: '+e.message, true); }
+}
+
+// ── Compute outcome ──
+async function computeOutcome(matterId, title) {
+  try {
+    const res = await Auth.fetch(`/api/voting/matter/${matterId}/compute`, {
+      method:'POST', body:JSON.stringify({preamble:'', operative_text:''})
+    });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error);
+
+    // Show modal
+    document.getElementById('modal-matter-title').textContent = title;
+    const mr = document.getElementById('modal-result');
+    mr.className = 'modal-result ' + (d.outcome==='PASSED'?'passed':'rejected');
+    document.getElementById('modal-outcome').textContent = d.outcome;
+    document.getElementById('modal-vote-counts').textContent =
+      `YES: ${d.yes_votes} | NO: ${d.no_votes} | ABSTAIN: ${d.abstentions} | ${d.yes_percentage}% (need ${d.threshold}%)`;
+    document.getElementById('modal-resolution').textContent =
+      d.resolution_number ? `Resolution: ${d.resolution_number}` : '';
+    document.getElementById('outcome-modal').classList.add('show');
+
+    await loadMatters();
+  } catch(e) { toast('Error: '+e.message, true); }
+}
+
+// ── Reset votes ──
+async function resetVotes(matterId, title) {
+  if (!confirm(`Reset ALL votes for "${title}"?\nThis cannot be undone.`)) return;
+  try {
+    const res = await Auth.fetch(`/api/voting/matter/${matterId}/reset`, {method:'DELETE'});
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error);
+    toast(d.message);
+    await loadMatters();
+  } catch(e) { toast('Error: '+e.message, true); }
+}
+
+// ── Audit log ──
+async function loadAudit() {
+  try {
+    const res = await Auth.fetch('/api/audit?limit=30');
+    const rows = await res.json();
+    const cls={VOTE:'action-vote',INSERT:'action-insert',STATUS_CHANGE:'action-status'};
+    document.getElementById('audit-body').innerHTML = rows.map(r=>`
+      <tr>
+        <td style="white-space:nowrap;color:var(--muted)">${new Date(r.action_timestamp).toLocaleString()}</td>
+        <td><span class="action-badge ${cls[r.action_type]||''}">${r.action_type}</span></td>
+        <td style="color:var(--muted)">${r.table_name}</td>
+        <td>${r.action_description}</td>
+        <td style="color:var(--muted)">${r.ip_address||'—'}</td>
+      </tr>`).join('');
+  } catch(e) {
+    document.getElementById('audit-body').innerHTML=`<tr><td colspan="5" style="text-align:center;color:var(--red)">Failed to load audit log</td></tr>`;
+  }
+}
+
+function closeModal() { document.getElementById('outcome-modal').classList.remove('show'); }
+document.getElementById('outcome-modal').addEventListener('click', e=>{ if(e.target===e.currentTarget)closeModal(); });
+
+// ── Organ change handler ──
+function onOrganChange(organ) {
+  const threshInput = document.getElementById('f-threshold');
+  const threshLabel = document.getElementById('threshold-label');
+  const threshHint  = document.getElementById('threshold-hint');
+  const typeSelect  = document.getElementById('f-type');
+
+  if (organ === 'ICJ') {
+    threshInput.value = '';
+    threshInput.disabled = true;
+    threshInput.placeholder = 'N/A';
+    threshLabel.textContent = 'Voting Threshold';
+    threshHint.textContent = '⚡ ICJ cases are decided by judges, not member state vote.';
+    threshHint.style.color = 'var(--gold)';
+    typeSelect.value = 'CASE';
+  } else {
+    threshInput.disabled = false;
+    threshInput.placeholder = '';
+    threshInput.value = threshInput.value || '50';
+    threshLabel.textContent = 'Voting Threshold (%)';
+    threshHint.textContent = '';
+    if (typeSelect.value === 'CASE') typeSelect.value = 'RESOLUTION';
+  }
+}
+
+// ── Submit new matter ──
+async function submitMatter(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-matter-btn');
+  const msg = document.getElementById('matter-form-msg');
+  btn.disabled = true; msg.textContent = 'Saving…';
+  try {
+    const organCode  = document.getElementById('f-organ').value;
+    const isICJ      = organCode === 'ICJ';
+    const threshRaw  = document.getElementById('f-threshold').value;
+    const threshold  = isICJ ? null : (parseInt(threshRaw) >= 0 ? parseInt(threshRaw) : 50);
+
+    // null-safe helper: empty string → null
+    const ns = id => { const v = document.getElementById(id).value.trim(); return v || null; };
+
+    const body = {
+      organ_code:         organCode,
+      matter_number:      document.getElementById('f-number').value.trim(),
+      title:              document.getElementById('f-title').value.trim(),
+      description:        ns('f-desc'),
+      matter_type:        document.getElementById('f-type').value,
+      priority:           document.getElementById('f-priority').value,
+      voting_threshold:   threshold,
+      session_number:     ns('f-session'),
+      agenda_item_number: ns('f-agenda'),
+      submission_date:    document.getElementById('f-date').value || null,
+    };
+    const res = await Auth.fetch('/api/matters', { method:'POST', body:JSON.stringify(body) });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error);
+    toast('✅ Matter created! matter_id=' + d.matter_id);
+    msg.textContent = '✅ Created — matter_id: ' + d.matter_id;
+    document.getElementById('matter-form').reset();
+    onOrganChange(''); // reset threshold state after form reset
+    await loadMatters();
+  } catch(err) {
+    toast(err.message, true);
+    msg.textContent = '❌ ' + err.message;
+  } finally { btn.disabled = false; }
+}
+
+// ── Submit announcement ──
+async function submitAnnouncement(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-ann-btn');
+  const msg = document.getElementById('ann-form-msg');
+  btn.disabled = true; msg.textContent = 'Posting…';
+  try {
+    const body = {
+      organ_id:  document.getElementById('a-organ').value || null,
+      title:     document.getElementById('a-title').value.trim(),
+      content:   document.getElementById('a-content').value.trim(),
+      category:  document.getElementById('a-cat').value,
+      is_pinned: parseInt(document.getElementById('a-pin').value),
+    };
+    const res = await Auth.fetch('/api/announcements', { method:'POST', body:JSON.stringify(body) });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error);
+    toast('📢 Announcement posted!');
+    msg.textContent = '✅ Posted!';
+    document.getElementById('ann-form').reset();
+    await loadAnnouncements();
+  } catch(err) {
+    toast(err.message, true);
+    msg.textContent = '❌ ' + err.message;
+  } finally { btn.disabled = false; }
+}
+
+// ── Delete announcement ──
+async function deleteAnn(id) {
+  if (!confirm('Delete this announcement?')) return;
+  try {
+    const res = await Auth.fetch(`/api/announcements/${id}`, { method:'DELETE' });
+    if (!res.ok) throw new Error('Failed');
+    toast('Deleted.');
+    await loadAnnouncements();
+  } catch(e) { toast(e.message, true); }
+}
+
+// ── Pin/unpin announcement ──
+async function togglePin(id, current) {
+  try {
+    const res = await Auth.fetch(`/api/announcements/${id}/pin`, {
+      method:'PATCH', body: JSON.stringify({ is_pinned: current ? 0 : 1 })
+    });
+    if (!res.ok) throw new Error('Failed');
+    await loadAnnouncements();
+  } catch(e) { toast(e.message, true); }
+}
+
+// ── Load announcements list ──
+const CAT_CLS = { NEWS:'cat-news', UPDATE:'cat-update', STATEMENT:'cat-statement', PRESS_RELEASE:'cat-press' };
+async function loadAnnouncements() {
+  try {
+    const res = await Auth.fetch('/api/announcements?limit=50');
+    const list = await res.json();
+    const el = document.getElementById('ann-list');
+    if (!list.length) { el.innerHTML='<div class="empty">No announcements yet. Post one above.</div>'; return; }
+    el.innerHTML = list.map(a => `
+      <div class="ann-card${a.is_pinned?' pinned':''}">
+        <div class="pin-icon">${a.is_pinned?'📌':'📄'}</div>
+        <div class="ann-body">
+          <div class="ann-title">${a.title}</div>
+          <div class="ann-meta">
+            <span class="cat-badge ${CAT_CLS[a.category]||''}">${a.category.replace('_',' ')}</span>
+            ${a.organ_code?`<span>${a.organ_code}</span>`:''}
+            <span>${new Date(a.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span>
+          </div>
+          <div class="ann-content">${a.content}</div>
+          <div class="ann-actions">
+            <button class="btn-sm" onclick="togglePin(${a.announcement_id},${a.is_pinned})">${a.is_pinned?'📌 Unpin':'📌 Pin'}</button>
+            <button class="btn-sm btn-red" onclick="deleteAnn(${a.announcement_id})">🗑 Delete</button>
+          </div>
+        </div>
+      </div>`).join('');
+  } catch(e) { document.getElementById('ann-list').innerHTML='<div class="empty" style="color:var(--red)">Failed to load announcements.</div>'; }
+}
+
+// ── Init ──
+loadMatters();
+setInterval(loadMatters, 15000); // auto-refresh every 15s
+</script>
+</body>
+</html>

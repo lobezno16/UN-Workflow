@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UN Live Updates | United Nations Workflow System</title>
+  <meta name="description" content="Live public updates from the United Nations — active voting sessions, recent resolutions, and matters under review.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%23c9a84c' stroke-width='2'/%3E%3Ctext x='16' y='21' text-anchor='middle' fill='%23c9a84c' font-size='14' font-family='serif' font-weight='bold'%3EUN%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #0a0d12; --surface: #111620; --surface2: #161c28;
+      --border: rgba(255,255,255,.07); --gold: #c9a84c; --gold-dim: rgba(201,168,76,.15);
+      --gold-border: rgba(201,168,76,.3); --text: #e8eaf0; --muted: #8892a4;
+      --green: #5ce07f; --red: #e05c5c; --blue: #5ca8e0; --orange: #e0975c;
+      --radius: 14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; min-height: 100vh; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(10,13,18,.92);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+      padding: .75rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+    .nav-icon { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--gold);
+      display: grid; place-items: center; font-size: .75rem; font-weight: 800; color: var(--gold); }
+    .nav-title { font-size: .95rem; font-weight: 700; color: var(--text); }
+    .nav-sub { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .85rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--gold); }
+    .nav-badge { background: var(--gold); color: #000; font-size: .6rem; font-weight: 700;
+      padding: .15rem .45rem; border-radius: 20px; margin-left: .35rem; animation: pulse-badge 2s infinite; }
+    @keyframes pulse-badge { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+    /* HEADER */
+    .page-header { padding: 3rem 2rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .live-pill { display: inline-flex; align-items: center; gap: .4rem; background: rgba(92,224,127,.1);
+      border: 1px solid rgba(92,224,127,.3); border-radius: 20px; padding: .3rem .75rem;
+      font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--green);
+      margin-bottom: 1rem; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+      animation: blink 1.4s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+    .page-title { font-size: 2.4rem; font-weight: 800; background: linear-gradient(135deg, #fff 60%, var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: .5rem; }
+    .page-subtitle { color: var(--muted); font-size: 1rem; max-width: 600px; }
+    .refresh-row { display: flex; align-items: center; gap: 1rem; margin-top: 1.25rem; }
+    .last-updated { font-size: .75rem; color: var(--muted); }
+    .refresh-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+      padding: .4rem .9rem; border-radius: 8px; font-size: .75rem; cursor: pointer;
+      font-family: 'Outfit', sans-serif; transition: all .2s; }
+    .refresh-btn:hover { border-color: var(--gold-border); color: var(--gold); }
+
+    /* STATS BAR */
+    .stats-bar { max-width: 1200px; margin: 0 auto 2.5rem; padding: 0 2rem;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.25rem 1.5rem; transition: border-color .2s; }
+    .stat-card:hover { border-color: var(--gold-border); }
+    .stat-num { font-size: 2rem; font-weight: 800; color: var(--gold); }
+    .stat-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-top: .2rem; }
+
+    /* MAIN GRID */
+    .main-grid { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem;
+      display: grid; grid-template-columns: 1fr 360px; gap: 2rem; }
+    @media(max-width:900px){ .main-grid{grid-template-columns:1fr} .stats-bar{grid-template-columns:repeat(2,1fr)} }
+
+    /* SECTION */
+    .section-title { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted); margin-bottom: 1rem; display: flex; align-items: center; gap: .5rem; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* MATTER CARD */
+    .matter-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.4rem; margin-bottom: 1rem; transition: border-color .25s, transform .2s; }
+    .matter-card:hover { border-color: var(--gold-border); transform: translateY(-2px); }
+    .matter-card.voting { border-color: rgba(92,224,127,.25); }
+    .matter-meta { display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem; flex-wrap: wrap; }
+    .badge { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+      padding: .2rem .6rem; border-radius: 20px; }
+    .badge-ga { background: rgba(92,168,224,.15); color: var(--blue); border: 1px solid rgba(92,168,224,.3); }
+    .badge-sc { background: rgba(201,168,76,.12); color: var(--gold); border: 1px solid var(--gold-border); }
+    .badge-ecosoc { background: rgba(224,151,92,.12); color: var(--orange); border: 1px solid rgba(224,151,92,.3); }
+    .badge-sec { background: rgba(138,92,224,.12); color: #a07ce0; border: 1px solid rgba(138,92,224,.3); }
+    .badge-status-voting { background: rgba(92,224,127,.12); color: var(--green); border: 1px solid rgba(92,224,127,.3); }
+    .badge-status-passed { background: rgba(92,224,127,.08); color: #4db86a; }
+    .badge-status-rejected { background: rgba(224,92,92,.08); color: var(--red); }
+    .badge-status-review { background: rgba(224,151,92,.08); color: var(--orange); }
+    .badge-status-pending { background: rgba(201,168,76,.08); color: var(--gold); }
+    .badge-status-approved { background: rgba(92,168,224,.08); color: var(--blue); }
+    .matter-num { font-size: .65rem; color: var(--muted); font-family: monospace; }
+    .matter-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: .5rem; line-height: 1.4; }
+    .matter-desc { font-size: .78rem; color: var(--muted); line-height: 1.6; margin-bottom: .85rem;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* TALLY */
+    .tally { margin-top: .5rem; }
+    .tally-bar-wrap { height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; margin-bottom: .5rem; display: flex; gap: 2px; }
+    .tally-seg { height: 100%; border-radius: 3px; transition: width .6s ease; }
+    .tally-seg.yes { background: var(--green); }
+    .tally-seg.no { background: var(--red); }
+    .tally-seg.abs { background: var(--muted); }
+    .tally-counts { display: flex; gap: 1rem; font-size: .72rem; color: var(--muted); }
+    .tally-yes { color: var(--green); }
+    .tally-no { color: var(--red); }
+    .threshold-note { font-size: .68rem; color: var(--muted); margin-top: .3rem; }
+
+    /* RESOLUTION CARD */
+    .resolution-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.1rem 1.25rem; margin-bottom: .75rem; display: flex; gap: 1rem; align-items: flex-start; }
+    .res-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: .1rem; }
+    .res-title { font-size: .88rem; font-weight: 600; margin-bottom: .2rem; }
+    .res-num { font-size: .65rem; color: var(--muted); font-family: monospace; }
+    .res-date { font-size: .65rem; color: var(--muted); margin-top: .2rem; }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    /* ACTIVITY LOG */
+    .activity-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .activity-header { padding: .9rem 1.1rem; border-bottom: 1px solid var(--border);
+      font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .activity-list { max-height: 340px; overflow-y: auto; padding: .5rem; }
+    .activity-item { display: flex; gap: .65rem; padding: .55rem .5rem; border-radius: 8px; transition: background .15s; }
+    .activity-item:hover { background: var(--surface2); }
+    .activity-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .activity-text { font-size: .75rem; color: var(--muted); line-height: 1.5; }
+    .activity-text strong { color: var(--text); }
+    .activity-time { font-size: .62rem; color: var(--muted); white-space: nowrap; margin-top: .15rem; }
+
+    /* UPCOMING PIPELINE */
+    .pipeline-item { display: flex; gap: .75rem; align-items: flex-start;
+      padding: .75rem; border-radius: 10px; transition: background .15s; }
+    .pipeline-item:hover { background: var(--surface2); }
+    .pipeline-icon { font-size: .85rem; flex-shrink: 0; }
+    .pipeline-title { font-size: .8rem; font-weight: 600; margin-bottom: .15rem; }
+    .pipeline-sub { font-size: .68rem; color: var(--muted); }
+
+    /* EMPTY STATE */
+    .empty { text-align: center; padding: 2.5rem; color: var(--muted); font-size: .85rem; }
+
+    /* LOADING */
+    .skeleton { background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+      background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* NOTICE BANNER */
+    .public-notice { background: rgba(92,168,224,.06); border: 1px solid rgba(92,168,224,.2);
+      border-radius: 10px; padding: .7rem 1rem; margin-bottom: 1.5rem; font-size: .78rem; color: var(--muted); }
+    .public-notice strong { color: var(--blue); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-icon">UN</div>
+    <div>
+      <div class="nav-title">United Nations</div>
+      <div class="nav-sub">Workflow System</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="organs/general-assembly.html">GA</a>
+    <a href="organs/security-council.html">SC</a>
+    <a href="updates.html" class="active">Live Updates <span class="nav-badge" id="live-count">—</span></a>
+    <a href="login.html?tab=delegate" style="color:var(--gold)">🌐 Delegate Login</a>
+    <a href="login.html?tab=admin" style="color:var(--gold)">🛡 Admin</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="live-pill"><span class="live-dot"></span> Live Session</div>
+  <h1 class="page-title">UN Live Updates</h1>
+  <p class="page-subtitle">Public view of active voting sessions, recent resolutions, and matters under review across all principal UN organs.</p>
+  <div class="refresh-row">
+    <span class="last-updated" id="last-updated">Fetching data…</span>
+    <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-card"><div class="stat-num" id="s-total">—</div><div class="stat-label">Total Matters</div></div>
+  <div class="stat-card"><div class="stat-num" id="s-voting" style="color:var(--green)">—</div><div class="stat-label">In Voting</div></div>
+  <div class="stat-card"><div class="stat-num" id="s-passed">—</div><div class="stat-label">Resolutions Passed</div></div>
+  <div class="stat-card"><div class="stat-num" id="s-rejected" style="color:var(--red)">—</div><div class="stat-label">Rejected / Vetoed</div></div>
+</div>
+
+<div class="main-grid">
+  <!-- LEFT COLUMN -->
+  <div>
+    <!-- ACTIVE VOTING -->
+    <div class="section-title">🔴 Active Voting Sessions</div>
+    <div id="voting-section"><div class="empty">Loading…</div></div>
+
+    <!-- UNDER REVIEW / UPCOMING -->
+    <div class="section-title" style="margin-top:2rem">📋 Under Review & Upcoming</div>
+    <div id="pipeline-section"><div class="empty">Loading…</div></div>
+
+    <!-- RECENT RESOLUTIONS -->
+    <div class="section-title" style="margin-top:2rem">📜 Recent Resolutions</div>
+    <div id="resolutions-section"><div class="empty">Loading…</div></div>
+  </div>
+
+  <!-- RIGHT COLUMN (sidebar) -->
+  <div class="sidebar">
+    <!-- NOTICE -->
+    <div class="public-notice">
+      <strong>👁 Public View</strong> — This page is read-only. To participate in voting, delegates must
+      <a href="login.html?tab=delegate" style="color:var(--blue)">sign in</a>.
+    </div>
+
+    <!-- ACTIVITY LOG -->
+    <div class="activity-card">
+      <div class="activity-header">📡 Latest Activity</div>
+      <div class="activity-list" id="activity-list"><div class="empty">Loading…</div></div>
+    </div>
+
+    <!-- PIPELINE SIDEBAR -->
+    <div class="activity-card">
+      <div class="activity-header">⏳ Pending Approval</div>
+      <div id="pending-list" style="padding:.5rem"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '';
+
+const ORGAN_BADGE = {
+  GA:'badge-ga', SC:'badge-sc', ECOSOC:'badge-ecosoc', SEC:'badge-sec', ICJ:'badge-sec', TC:'badge-sec'
+};
+const STATUS_BADGE = {
+  IN_VOTING:'badge-status-voting', PASSED:'badge-status-passed', REJECTED:'badge-status-rejected',
+  UNDER_REVIEW:'badge-status-review', PENDING_APPROVAL:'badge-status-pending',
+  APPROVED:'badge-status-approved', SUBMITTED:'badge-status-review',
+  CLOSED:'badge-status-passed', WITHDRAWN:'badge-status-rejected'
+};
+const STATUS_LABEL = {
+  IN_VOTING:'In Voting', PASSED:'Passed', REJECTED:'Rejected/Vetoed',
+  UNDER_REVIEW:'Under Review', PENDING_APPROVAL:'Pending Approval',
+  APPROVED:'Approved', SUBMITTED:'Submitted', CLOSED:'Closed', WITHDRAWN:'Withdrawn'
+};
+
+function badge(cls, text) {
+  return `<span class="badge ${cls}">${text}</span>`;
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m = Math.floor(diff/60000), h = Math.floor(m/60), d = Math.floor(h/24);
+  if (d > 0) return `${d}d ago`;
+  if (h > 0) return `${h}h ago`;
+  if (m > 0) return `${m}m ago`;
+  return 'just now';
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+}
+
+async function loadAll() {
+  try {
+    const res = await fetch(`${API}/api/matters`);
+    const data = await res.json();
+    const matters = data.matters || data || [];
+    renderAll(matters);
+    document.getElementById('last-updated').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+  } catch(e) {
+    document.getElementById('last-updated').textContent = 'Could not fetch data — is the server running?';
+  }
+
+  try {
+    const res = await fetch(`${API}/api/audit?limit=25`);
+    const data = await res.json();
+    renderActivity(data.logs || data || []);
+  } catch(e) {}
+}
+
+function renderAll(matters) {
+  const voting    = matters.filter(m => m.status === 'IN_VOTING');
+  const pipeline  = matters.filter(m => ['UNDER_REVIEW','SUBMITTED','APPROVED'].includes(m.status));
+  const pending   = matters.filter(m => m.status === 'PENDING_APPROVAL');
+  const resolved  = matters.filter(m => ['PASSED','REJECTED','CLOSED'].includes(m.status));
+
+  // Stats
+  document.getElementById('s-total').textContent   = matters.length;
+  document.getElementById('s-voting').textContent   = voting.length;
+  document.getElementById('s-passed').textContent   = matters.filter(m=>m.status==='PASSED').length;
+  document.getElementById('s-rejected').textContent = matters.filter(m=>m.status==='REJECTED').length;
+  document.getElementById('live-count').textContent = voting.length;
+
+  // Active voting
+  const vEl = document.getElementById('voting-section');
+  if (voting.length === 0) {
+    vEl.innerHTML = `<div class="empty">No active voting sessions at this time.</div>`;
+  } else {
+    vEl.innerHTML = voting.map(m => renderVotingCard(m)).join('');
+    // Fetch tallies
+    voting.forEach(m => fetchTally(m));
+  }
+
+  // Pipeline
+  const pEl = document.getElementById('pipeline-section');
+  if (pipeline.length === 0) {
+    pEl.innerHTML = `<div class="empty">No matters currently under review.</div>`;
+  } else {
+    pEl.innerHTML = pipeline.map(m => `
+      <div class="matter-card">
+        <div class="matter-meta">
+          ${badge(ORGAN_BADGE[m.organ_code]||'badge-sec', m.organ_code)}
+          ${badge(STATUS_BADGE[m.status]||'', STATUS_LABEL[m.status]||m.status)}
+          <span class="matter-num">${m.matter_number}</span>
+        </div>
+        <div class="matter-title">${m.title}</div>
+        <div class="matter-desc">${m.description || ''}</div>
+      </div>`).join('');
+  }
+
+  // Pending sidebar
+  const peEl = document.getElementById('pending-list');
+  if (pending.length === 0) {
+    peEl.innerHTML = `<div class="empty">None pending.</div>`;
+  } else {
+    peEl.innerHTML = pending.map(m => `
+      <div class="pipeline-item">
+        <span class="pipeline-icon">${m.organ_code==='SC'?'🔵':'🟡'}</span>
+        <div>
+          <div class="pipeline-title">${m.title}</div>
+          <div class="pipeline-sub">${badge(ORGAN_BADGE[m.organ_code]||'badge-sec', m.organ_code)} &nbsp;${m.matter_number}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // Resolutions
+  const rEl = document.getElementById('resolutions-section');
+  if (resolved.length === 0) {
+    rEl.innerHTML = `<div class="empty">No resolved matters yet.</div>`;
+  } else {
+    rEl.innerHTML = resolved.map(m => `
+      <div class="resolution-card">
+        <div class="res-icon">${m.status==='PASSED'?'✅':m.status==='REJECTED'?'❌':'📁'}</div>
+        <div>
+          <div class="res-title">${m.title}</div>
+          <div class="res-num">${m.matter_number}</div>
+          <div class="res-date">${badge(ORGAN_BADGE[m.organ_code]||'badge-sec', m.organ_code)} &nbsp;${badge(STATUS_BADGE[m.status]||'', STATUS_LABEL[m.status]||m.status)}</div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+function renderVotingCard(m) {
+  return `
+    <div class="matter-card voting" id="matter-card-${m.matter_id}">
+      <div class="matter-meta">
+        ${badge(ORGAN_BADGE[m.organ_code]||'badge-sec', m.organ_code)}
+        ${badge('badge-status-voting','🔴 In Voting')}
+        <span class="matter-num">${m.matter_number}</span>
+      </div>
+      <div class="matter-title">${m.title}</div>
+      <div class="matter-desc">${m.description||''}</div>
+      <div class="tally" id="tally-${m.matter_id}">
+        <div class="tally-bar-wrap">
+          <div class="tally-seg yes" style="width:0%"></div>
+          <div class="tally-seg no" style="width:0%"></div>
+          <div class="tally-seg abs" style="width:0%"></div>
+        </div>
+        <div class="tally-counts">
+          <span class="tally-yes">YES: —</span>
+          <span class="tally-no">NO: —</span>
+          <span style="color:var(--muted)">ABS: —</span>
+        </div>
+        <div class="threshold-note">⚖️ Threshold: ${m.voting_threshold || 50}%</div>
+      </div>
+    </div>`;
+}
+
+async function fetchTally(m) {
+  try {
+    const res = await fetch(`${API}/api/voting/matter/${m.matter_id}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    const { yes_count=0, no_count=0, abstain_count=0, eligible_count=0 } = data;
+    const total = Math.max(eligible_count, yes_count + no_count + abstain_count, 1);
+    const yPct = (yes_count/total*100).toFixed(1);
+    const nPct = (no_count/total*100).toFixed(1);
+    const aPct = (abstain_count/total*100).toFixed(1);
+    const el = document.getElementById(`tally-${m.matter_id}`);
+    if (!el) return;
+    el.querySelector('.tally-seg.yes').style.width = yPct + '%';
+    el.querySelector('.tally-seg.no').style.width  = nPct + '%';
+    el.querySelector('.tally-seg.abs').style.width  = aPct + '%';
+    el.querySelector('.tally-yes').textContent = `YES: ${yes_count}`;
+    el.querySelector('.tally-no').textContent  = `NO: ${no_count}`;
+    el.querySelectorAll('.tally-counts span')[2].textContent = `ABS: ${abstain_count}`;
+  } catch(e) {}
+}
+
+function renderActivity(logs) {
+  const el = document.getElementById('activity-list');
+  if (!logs || logs.length === 0) {
+    el.innerHTML = `<div class="empty">No recent activity.</div>`;
+    return;
+  }
+  const colors = { INSERT:'var(--green)', UPDATE:'var(--gold)', DELETE:'var(--red)', SELECT:'var(--blue)' };
+  el.innerHTML = logs.slice(0,20).map(log => {
+    const op    = (log.action_type || 'UPDATE').toUpperCase();
+    const color = colors[op] || 'var(--muted)';
+    const table = log.table_name || '';
+    const who   = log.performed_by_name || 'System';
+    const desc  = `${op} on <strong>${table}</strong> by ${who}`;
+    return `<div class="activity-item">
+      <div class="activity-dot" style="background:${color}"></div>
+      <div>
+        <div class="activity-text">${desc}</div>
+        <div class="activity-time">${timeAgo(log.action_timestamp)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Auto-refresh every 30s
+loadAll();
+setInterval(loadAll, 30000);
+
+// Tally refresh every 10s for active sessions
+setInterval(async () => {
+  try {
+    const res = await fetch(`${API}/api/matters`);
+    const data = await res.json();
+    const matters = data.matters || data || [];
+    matters.filter(m=>m.status==='IN_VOTING').forEach(fetchTally);
+  } catch(e) {}
+}, 10000);
+</script>
+</body>
+</html>

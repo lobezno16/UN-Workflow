@@ -9,6 +9,7 @@ const cors = require('cors');
 const path = require('path');
 
 // Import routes
+const authRoutes = require('./routes/auth');
 const organsRoutes = require('./routes/organs');
 const mattersRoutes = require('./routes/matters');
 const votingRoutes = require('./routes/voting');
@@ -18,6 +19,7 @@ const secretariatRoutes = require('./routes/secretariat');
 const trusteeshipRoutes = require('./routes/trusteeship');
 const auditRoutes = require('./routes/audit');
 const dashboardRoutes = require('./routes/dashboard');
+const announcementsRoutes = require('./routes/announcements');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // API Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/organs', organsRoutes);
 app.use('/api/matters', mattersRoutes);
 app.use('/api/voting', votingRoutes);
@@ -40,6 +43,7 @@ app.use('/api/secretariat', secretariatRoutes);
 app.use('/api/trusteeship', trusteeshipRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/announcements', announcementsRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
