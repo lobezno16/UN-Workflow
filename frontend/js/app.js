@@ -228,11 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
           tbody.appendChild(tr);
         });
       } else if (container) {
-        container.innerHTML = '';
         if (activeMatters.length === 0) {
-          container.innerHTML = '<div class="glass-card"><p style="text-align:center; color: var(--color-text-muted);">No active matters found.</p></div>';
+          // Keep static fallback content if no DB matters exist
           return;
         }
+        container.innerHTML = '';
 
         activeMatters.forEach(m => {
           const card = document.createElement('div');
