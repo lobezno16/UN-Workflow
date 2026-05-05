@@ -1,4 +1,4 @@
-﻿# CHAPTER 3
+# CHAPTER 3
 
 ## Complex Queries Based on the Concepts of Constraints, Sets, Joins, Views, Triggers and Cursors
 
@@ -775,6 +775,66 @@ CALL sp_organ_statistics();
 | ECOSOC | Economic and Social Council | 2 | 5 | 1 |
 | TC | Trusteeship Council | 1 | 0 | 0 |
 | ICJ | International Court of Justice | 0 | 0 | 0 |
+
+---
+
+### Complex Queries Based on Functions and Exception Handling
+
+**Question 1:** Create a custom function to calculate the approval percentage of a matter based on votes, then use it in a query with exception handling to gracefully handle cases where no votes have been cast (avoiding division by zero errors).
+
+**SQL Statement:**
+
+```sql
+DELIMITER //
+
+CREATE FUNCTION get_approval_percentage(p_matter_id INT) 
+RETURNS DECIMAL(5,2)
+READS SQL DATA
+BEGIN
+    DECLARE total_votes INT;
+    DECLARE yes_votes INT;
+    DECLARE approval_pct DECIMAL(5,2);
+    
+    -- Exception Handling: Declare handler for division by zero
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '22012'
+    BEGIN
+        SET approval_pct = 0.00;
+    END;
+
+    -- Get vote counts
+    SELECT COUNT(*), SUM(IF(vote_value = 'YES', 1, 0))
+    INTO total_votes, yes_votes
+    FROM vote
+    WHERE matter_id = p_matter_id;
+
+    -- Calculate percentage
+    IF total_votes = 0 THEN
+        -- Manually triggering exception logic or handling zero
+        SET approval_pct = 0.00;
+    ELSE
+        SET approval_pct = (yes_votes / total_votes) * 100;
+    END IF;
+
+    RETURN approval_pct;
+END //
+
+DELIMITER ;
+
+-- Query utilizing the custom function
+SELECT matter_number, title, get_approval_percentage(matter_id) AS approval_percentage
+FROM matter
+WHERE requires_voting = TRUE;
+```
+
+**Output:**
+
+| matter_number | title | approval_percentage |
+|---|---|---|
+| GA/RES/79/001 | Resolution on Climate Action Acceleration | 100.00 |
+| GA/RES/79/002 | Resolution on Digital Cooperation and AI Governance | 71.43 |
+| GA/RES/79/003 | Resolution on Pandemic Preparedness Treaty | 85.71 |
+| SC/RES/2730 | Resolution on Humanitarian Ceasefire | 77.78 |
+| SC/RES/2731 | Resolution on Peacekeeping Mission Extension - UNMISS | 0.00 |
 
 ---
 

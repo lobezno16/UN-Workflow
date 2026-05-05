@@ -1,6 +1,9 @@
 # CHAPTER 6
 ## FRONT-END AND BACK-END CODE OF UNITED NATIONS BUREAUCRATIC WORKFLOW MANAGEMENT SYSTEM
 
+> [!NOTE]
+> **Project Update Notice**: The codebase has undergone significant modernization and structural changes since its initial conception. The excerpts below highlight key components of the current architecture. For the complete, fully functioning, and most up-to-date source code—including the full API, frontend design system, and database schema—please refer to the project's official GitHub repository.
+
 ### 6.1 Frontend Module Code
 
 **Technology Stack**: HTML5, CSS3, Vanilla JavaScript (ES6+), GSAP 3.12 + ScrollTrigger, Lenis smooth scroll
