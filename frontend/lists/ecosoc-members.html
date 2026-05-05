@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECOSOC Members | United Nations Workflow System</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/organ-page.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%23c9a84c' stroke-width='2'/%3E%3Ctext x='16' y='21' text-anchor='middle' fill='%23c9a84c' font-size='14' font-family='serif' font-weight='bold'%3EUN%3C/text%3E%3C/svg%3E">
+  <style>
+    .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.5rem; }
+    .member-chip { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+    .member-chip:hover { background: rgba(0,188,140,0.1); border-color: var(--color-teal); }
+    .member-chip .term { color: var(--color-teal); font-size: 0.75rem; font-family: var(--font-mono); }
+    .region-header { color: var(--color-teal); font-size: var(--fs-h3); margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(0,188,140,0.3); }
+    .region-header span { font-size: 0.85rem; color: var(--color-text-muted); font-weight: normal; }
+  </style>
+</head>
+<body>
+  <nav class="nav is-scrolled" id="main-nav">
+    <div class="nav__inner">
+      <a href="../index.html" class="nav__logo"><div class="nav__logo-icon">UN</div><div><div class="nav__logo-text">United Nations</div><div class="nav__logo-sub">Workflow System</div></div></a>
+      <div class="nav__links">
+        <a href="../index.html" class="nav__link">Home</a>
+        <a href="../organs/general-assembly.html" class="nav__link">GA</a>
+        <a href="../organs/security-council.html" class="nav__link">SC</a>
+        <a href="../organs/ecosoc.html" class="nav__link active">ECOSOC</a>
+        <a href="../organs/icj.html" class="nav__link">ICJ</a>
+        <a href="../organs/secretariat.html" class="nav__link">Secretariat</a>
+        <a href="../organs/trusteeship.html" class="nav__link">TC</a>
+      </div>
+      <button class="nav__hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section style="padding: calc(var(--nav-height) + 2rem) 0 var(--space-lg);">
+    <div class="container">
+      <a href="../organs/ecosoc.html" class="back-link">← Back to ECOSOC</a>
+      <h1 style="font-size: var(--fs-h1); margin: 1rem 0 0.5rem;">ECOSOC — All 54 Elected Members</h1>
+      <p class="t-secondary" style="margin-bottom: 2rem;">Members elected by the General Assembly for 3-year staggered terms. Term expiry year shown. Effective January 1, 2026.</p>
+
+      <h2 class="region-header">🌍 African States <span>— 14 seats</span></h2>
+      <div class="member-grid">
+        <div class="member-chip">🇩🇿 Algeria <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇧🇮 Burundi <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇹🇩 Chad <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇨🇮 Côte d'Ivoire <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇩🇯 Djibouti <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇰🇪 Kenya <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇲🇷 Mauritania <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇲🇿 Mozambique <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇳🇬 Nigeria <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇸🇳 Senegal <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇸🇱 Sierra Leone <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇿🇦 South Africa <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇹🇿 Tanzania <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇿🇲 Zambia <span class="term">→ 2026</span></div>
+      </div>
+
+      <h2 class="region-header">🌏 Asia-Pacific States <span>— 11 seats</span></h2>
+      <div class="member-grid">
+        <div class="member-chip">🇧🇩 Bangladesh <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇨🇳 China <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇮🇳 India <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇮🇩 Indonesia <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇯🇵 Japan <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇱🇧 Lebanon <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇵🇰 Pakistan <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇸🇦 Saudi Arabia <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇱🇰 Sri Lanka <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇹🇲 Turkmenistan <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇺🇿 Uzbekistan <span class="term">→ 2027</span></div>
+      </div>
+
+      <h2 class="region-header">🌐 Eastern European States <span>— 6 seats</span></h2>
+      <div class="member-grid">
+        <div class="member-chip">🇦🇲 Armenia <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇦🇿 Azerbaijan <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇭🇷 Croatia <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇵🇱 Poland <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇷🇺 Russian Federation <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇺🇦 Ukraine <span class="term">→ 2028</span></div>
+      </div>
+
+      <h2 class="region-header">🌎 Latin American & Caribbean <span>— 10 seats</span></h2>
+      <div class="member-grid">
+        <div class="member-chip">🇦🇬 Antigua & Barbuda <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇩🇴 Dominican Republic <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇪🇨 Ecuador <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇭🇹 Haiti <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇲🇽 Mexico <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇵🇾 Paraguay <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇵🇪 Peru <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇰🇳 St. Kitts & Nevis <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇸🇷 Suriname <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇺🇾 Uruguay <span class="term">→ 2026</span></div>
+      </div>
+
+      <h2 class="region-header">🌐 Western European & Other States <span>— 13 seats</span></h2>
+      <div class="member-grid">
+        <div class="member-chip">🇦🇺 Australia <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇦🇹 Austria <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇨🇦 Canada <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇫🇮 Finland <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇫🇷 France <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇩🇪 Germany <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇳🇱 Netherlands <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇳🇴 Norway <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇪🇸 Spain <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇨🇭 Switzerland <span class="term">→ 2027</span></div>
+        <div class="member-chip">🇹🇷 Türkiye <span class="term">→ 2028</span></div>
+        <div class="member-chip">🇬🇧 United Kingdom <span class="term">→ 2026</span></div>
+        <div class="member-chip">🇺🇸 United States <span class="term">→ 2027</span></div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <a href="../organs/ecosoc.html" class="back-link" style="font-size: 1.1rem;">← Return to ECOSOC</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer"><div class="container"><div class="footer__bottom">
+    <span class="footer__copyright">© 2026 UN Workflow Management System</span>
+  </div></div></footer>
+
+  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>
