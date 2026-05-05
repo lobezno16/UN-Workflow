@@ -838,6 +838,111 @@ WHERE requires_voting = TRUE;
 
 ---
 
+**Question 2:** Create a custom function to determine a UN delegate's seniority level based on their credential date, and use it in a query to categorize active permanent representatives.
+
+**SQL Statement:**
+
+```sql
+DELIMITER //
+
+CREATE FUNCTION get_delegate_seniority(p_credential_date DATE) 
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+    DECLARE years_served INT;
+    DECLARE seniority VARCHAR(20);
+    
+    SET years_served = TIMESTAMPDIFF(YEAR, p_credential_date, CURDATE());
+    
+    IF years_served >= 5 THEN
+        SET seniority = 'VETERAN';
+    ELSEIF years_served >= 2 THEN
+        SET seniority = 'EXPERIENCED';
+    ELSE
+        SET seniority = 'JUNIOR';
+    END IF;
+    
+    RETURN seniority;
+END //
+
+DELIMITER ;
+
+-- Query utilizing the seniority function
+SELECT CONCAT(first_name, ' ', last_name) AS delegate_name, 
+       credential_date, 
+       get_delegate_seniority(credential_date) AS seniority_level
+FROM delegate
+WHERE is_permanent_representative = TRUE
+ORDER BY credential_date ASC;
+```
+
+**Output:**
+
+| delegate_name | credential_date | seniority_level |
+|---|---|---|
+| Linda Thomas-Greenfield | 2021-02-25 | VETERAN |
+| Antje Leendertse | 2022-03-01 | EXPERIENCED |
+| Ruchira Kamboj | 2022-06-01 | EXPERIENCED |
+| Mitch Fifield | 2022-06-15 | EXPERIENCED |
+| Ishikane Kimihiro | 2022-09-01 | EXPERIENCED |
+| Robert Wood | 2023-01-01 | EXPERIENCED |
+| Ronaldo Costa Filho | 2023-01-15 | EXPERIENCED |
+| Geng Shuang | 2023-06-01 | EXPERIENCED |
+
+---
+
+**Question 3:** Create a function that retrieves a matter's status but uses exception handling (`SIGNAL SQLSTATE`) to throw a custom error if the provided matter ID does not exist in the database.
+
+**SQL Statement:**
+
+```sql
+DELIMITER //
+
+CREATE FUNCTION get_matter_status_safe(p_matter_id INT) 
+RETURNS VARCHAR(50)
+READS SQL DATA
+BEGIN
+    DECLARE v_status VARCHAR(50);
+    DECLARE matter_exists INT;
+    
+    -- Check if matter exists
+    SELECT COUNT(*) INTO matter_exists FROM matter WHERE matter_id = p_matter_id;
+    
+    IF matter_exists = 0 THEN
+        -- Exception Handling: Throw custom error for missing record
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Error: Matter ID does not exist in the database.';
+    END IF;
+    
+    -- Retrieve status if it exists
+    SELECT status INTO v_status FROM matter WHERE matter_id = p_matter_id;
+    
+    RETURN v_status;
+END //
+
+DELIMITER ;
+
+-- Successful execution for an existing matter
+SELECT get_matter_status_safe(1) AS matter_status;
+
+-- Exception handling demonstration for a non-existent matter
+-- SELECT get_matter_status_safe(999); 
+```
+
+**Output (Successful Execution):**
+
+| matter_status |
+|---|
+| PASSED |
+
+**Output (Exception Handled - ID 999):**
+
+```text
+ERROR 1644 (45000): Error: Matter ID does not exist in the database.
+```
+
+---
+
 # CHAPTER 4
 
 ## ANALYZING THE PITFALLS, IDENTIFYING THE DEPENDENCIES, AND APPLYING NORMALIZATIONS
