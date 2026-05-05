@@ -236,7 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         activeMatters.forEach(m => {
           const card = document.createElement('div');
-          card.className = 'glass-card reveal';
+          card.className = 'glass-card';
+          card.style.opacity = '1';
           card.innerHTML = `
             <div class="t-mono" style="color: var(--color-teal); margin-bottom: 0.5rem;">${m.matter_number}</div>
             <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">${m.title}</h3>
