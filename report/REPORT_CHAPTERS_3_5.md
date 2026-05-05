@@ -778,52 +778,39 @@ CALL sp_organ_statistics();
 
 ---
 
-### Complex Queries Based on Functions and Exception Handling
+### Complex Queries Based on Functions
 
-**Question 1:** Create a custom function to calculate the approval percentage of a matter based on votes, then use it in a query with exception handling to gracefully handle cases where no votes have been cast (avoiding division by zero errors).
+**Question 1:** Create a custom function to calculate the approval percentage of a matter based on votes, and use it in a query.
 
 **SQL Statement:**
 
 ```sql
 DELIMITER //
 
-CREATE FUNCTION get_approval_percentage(p_matter_id INT) 
+CREATE FUNCTION calculate_matter_approval_rate(p_matter_id INT) 
 RETURNS DECIMAL(5,2)
 READS SQL DATA
 BEGIN
     DECLARE total_votes INT;
     DECLARE yes_votes INT;
-    DECLARE approval_pct DECIMAL(5,2);
     
-    -- Exception Handling: Declare handler for division by zero
-    DECLARE CONTINUE HANDLER FOR SQLSTATE '22012'
-    BEGIN
-        SET approval_pct = 0.00;
-    END;
-
-    -- Get vote counts
     SELECT COUNT(*), SUM(IF(vote_value = 'YES', 1, 0))
     INTO total_votes, yes_votes
     FROM vote
     WHERE matter_id = p_matter_id;
 
-    -- Calculate percentage
     IF total_votes = 0 THEN
-        -- Manually triggering exception logic or handling zero
-        SET approval_pct = 0.00;
+        RETURN 0.00;
     ELSE
-        SET approval_pct = (yes_votes / total_votes) * 100;
+        RETURN (yes_votes / total_votes) * 100;
     END IF;
-
-    RETURN approval_pct;
 END //
 
 DELIMITER ;
 
 -- Query utilizing the custom function
-SELECT matter_number, title, get_approval_percentage(matter_id) AS approval_percentage
-FROM matter
-WHERE requires_voting = TRUE;
+SELECT matter_number, title, calculate_matter_approval_rate(matter_id) AS approval_percentage
+FROM matter WHERE requires_voting = TRUE;
 ```
 
 **Output:**
@@ -832,13 +819,10 @@ WHERE requires_voting = TRUE;
 |---|---|---|
 | GA/RES/79/001 | Resolution on Climate Action Acceleration | 100.00 |
 | GA/RES/79/002 | Resolution on Digital Cooperation and AI Governance | 71.43 |
-| GA/RES/79/003 | Resolution on Pandemic Preparedness Treaty | 85.71 |
-| SC/RES/2730 | Resolution on Humanitarian Ceasefire | 77.78 |
-| SC/RES/2731 | Resolution on Peacekeeping Mission Extension - UNMISS | 0.00 |
 
 ---
 
-**Question 2:** Create a custom function to determine a UN delegate's seniority level based on their credential date, and use it in a query to categorize active permanent representatives.
+**Question 2:** Create a custom function to determine a UN delegate's seniority level based on their credential date.
 
 **SQL Statement:**
 
@@ -850,29 +834,21 @@ RETURNS VARCHAR(20)
 DETERMINISTIC
 BEGIN
     DECLARE years_served INT;
-    DECLARE seniority VARCHAR(20);
-    
     SET years_served = TIMESTAMPDIFF(YEAR, p_credential_date, CURDATE());
     
-    IF years_served >= 5 THEN
-        SET seniority = 'VETERAN';
-    ELSEIF years_served >= 2 THEN
-        SET seniority = 'EXPERIENCED';
-    ELSE
-        SET seniority = 'JUNIOR';
+    IF years_served >= 5 THEN RETURN 'VETERAN';
+    ELSEIF years_served >= 2 THEN RETURN 'EXPERIENCED';
+    ELSE RETURN 'JUNIOR';
     END IF;
-    
-    RETURN seniority;
 END //
 
 DELIMITER ;
 
 -- Query utilizing the seniority function
 SELECT CONCAT(first_name, ' ', last_name) AS delegate_name, 
-       credential_date, 
-       get_delegate_seniority(credential_date) AS seniority_level
-FROM delegate
-WHERE is_permanent_representative = TRUE
+       credential_date, get_delegate_seniority(credential_date) AS seniority_level
+FROM delegate 
+WHERE is_permanent_representative = TRUE 
 ORDER BY credential_date ASC;
 ```
 
@@ -883,65 +859,152 @@ ORDER BY credential_date ASC;
 | Linda Thomas-Greenfield | 2021-02-25 | VETERAN |
 | Antje Leendertse | 2022-03-01 | EXPERIENCED |
 | Ruchira Kamboj | 2022-06-01 | EXPERIENCED |
-| Mitch Fifield | 2022-06-15 | EXPERIENCED |
-| Ishikane Kimihiro | 2022-09-01 | EXPERIENCED |
-| Robert Wood | 2023-01-01 | EXPERIENCED |
-| Ronaldo Costa Filho | 2023-01-15 | EXPERIENCED |
-| Geng Shuang | 2023-06-01 | EXPERIENCED |
 
 ---
 
-**Question 3:** Create a function that retrieves a matter's status but uses exception handling (`SIGNAL SQLSTATE`) to throw a custom error if the provided matter ID does not exist in the database.
+**Question 3:** Create a custom function that returns the total count of PASSED resolutions for a given organ ID.
 
 **SQL Statement:**
 
 ```sql
 DELIMITER //
 
-CREATE FUNCTION get_matter_status_safe(p_matter_id INT) 
-RETURNS VARCHAR(50)
+CREATE FUNCTION get_organ_resolution_count(p_organ_id INT) 
+RETURNS INT
 READS SQL DATA
 BEGIN
-    DECLARE v_status VARCHAR(50);
-    DECLARE matter_exists INT;
-    
-    -- Check if matter exists
-    SELECT COUNT(*) INTO matter_exists FROM matter WHERE matter_id = p_matter_id;
-    
-    IF matter_exists = 0 THEN
-        -- Exception Handling: Throw custom error for missing record
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Error: Matter ID does not exist in the database.';
-    END IF;
-    
-    -- Retrieve status if it exists
-    SELECT status INTO v_status FROM matter WHERE matter_id = p_matter_id;
-    
-    RETURN v_status;
+    DECLARE res_count INT;
+    SELECT COUNT(*) INTO res_count FROM matter 
+    WHERE organ_id = p_organ_id AND status = 'PASSED';
+    RETURN res_count;
 END //
 
 DELIMITER ;
 
--- Successful execution for an existing matter
-SELECT get_matter_status_safe(1) AS matter_status;
-
--- Exception handling demonstration for a non-existent matter
--- SELECT get_matter_status_safe(999); 
+-- Query utilizing the counting function
+SELECT organ_code, organ_name, get_organ_resolution_count(organ_id) AS passed_resolutions
+FROM un_organ;
 ```
 
-**Output (Successful Execution):**
+**Output:**
 
-| matter_status |
-|---|
-| PASSED |
+| organ_code | organ_name | passed_resolutions |
+|---|---|---|
+| GA | General Assembly | 2 |
+| SC | Security Council | 1 |
+| ECOSOC | Economic and Social Council | 1 |
 
-**Output (Exception Handled - ID 999):**
+---
+
+### Complex Queries Based on Exception Handling
+
+**Question 1:** Create a stored procedure to safely cast a vote, throwing a custom exception (`SIGNAL SQLSTATE`) if the matter is not in the 'IN_VOTING' stage.
+
+**SQL Statement:**
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE cast_vote_safe(p_matter_id INT, p_state_id INT, p_delegate_id INT, p_vote_value VARCHAR(10))
+BEGIN
+    DECLARE v_status VARCHAR(50);
+    
+    SELECT status INTO v_status FROM matter WHERE matter_id = p_matter_id;
+    
+    IF v_status != 'IN_VOTING' THEN
+        -- Exception Handling: Throw custom error
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Exception: Matter is not currently open for voting.';
+    ELSE
+        INSERT INTO vote (matter_id, state_id, delegate_id, vote_value) 
+        VALUES (p_matter_id, p_state_id, p_delegate_id, p_vote_value);
+    END IF;
+END //
+
+DELIMITER ;
+
+-- Attempt to cast a vote on a matter that is already 'PASSED'
+-- CALL cast_vote_safe(1, 2, 5, 'YES');
+```
+
+**Output:**
 
 ```text
-ERROR 1644 (45000): Error: Matter ID does not exist in the database.
+ERROR 1644 (45000): Exception: Matter is not currently open for voting.
 ```
 
 ---
+
+**Question 2:** Create a stored procedure that adds a new delegate, but uses a `CONTINUE HANDLER` to gracefully handle duplicate entry exceptions (SQLSTATE 23000) instead of crashing the transaction.
+
+**SQL Statement:**
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE add_delegate_safe(p_delegate_code VARCHAR(20), p_first_name VARCHAR(50), p_last_name VARCHAR(50), p_state_id INT, p_organ_id INT)
+BEGIN
+    -- Exception Handling: Handle unique constraint violation
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '23000'
+    BEGIN
+        SELECT CONCAT('Exception Handled: Delegate code ', p_delegate_code, ' already exists.') AS Error_Message;
+    END;
+
+    INSERT INTO delegate (delegate_code, first_name, last_name, state_id, organ_id, is_permanent_representative) 
+    VALUES (p_delegate_code, p_first_name, p_last_name, p_state_id, p_organ_id, TRUE);
+END //
+
+DELIMITER ;
+
+-- Attempt to insert a delegate code that is already in the database
+CALL add_delegate_safe('DEL-USA-GA', 'Jane', 'Doe', 1, 1);
+```
+
+**Output:**
+
+| Error_Message |
+|---|
+| Exception Handled: Delegate code DEL-USA-GA already exists. |
+
+---
+
+**Question 3:** Create a procedure that retrieves a matter's details and throws a custom exception if the provided matter ID does not exist in the database.
+
+**SQL Statement:**
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE check_matter_exists_safe(p_matter_id INT) 
+BEGIN
+    DECLARE matter_exists INT;
+    
+    SELECT COUNT(*) INTO matter_exists FROM matter WHERE matter_id = p_matter_id;
+    
+    IF matter_exists = 0 THEN
+        -- Exception Handling: Throw error for missing record
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Exception: Matter ID does not exist in the database.';
+    ELSE
+        SELECT matter_number, title, status FROM matter WHERE matter_id = p_matter_id;
+    END IF;
+END //
+
+DELIMITER ;
+
+-- Exception handling demonstration for a non-existent matter
+-- CALL check_matter_exists_safe(9999); 
+```
+
+**Output:**
+
+```text
+ERROR 1644 (45000): Exception: Matter ID does not exist in the database.
+```
+
+---
+
+
 
 # CHAPTER 4
 
