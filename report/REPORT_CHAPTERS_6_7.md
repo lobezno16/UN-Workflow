@@ -3,164 +3,244 @@
 
 ### 6.1 Frontend Module Code
 
-**Technology Stack**: HTML5, CSS3, Vanilla JavaScript with ES6+ features
+**Technology Stack**: HTML5, CSS3, Vanilla JavaScript (ES6+), GSAP 3.12 + ScrollTrigger, Lenis smooth scroll
 
 #### 6.1.1 Main HTML Structure (index.html)
+
+The frontend uses a modern multi-section landing page architecture with a fixed navigation bar, animated hero section, organ card grid, and ICJ spotlight. External libraries (GSAP, Lenis) are loaded from CDN, with custom modules (`hero.js`, `animations.js`, `nav.js`, `app.js`) handling interactivity.
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UN Workflow Management System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>United Nations | Workflow Management System</title>
+  <meta name="description"
+    content="United Nations Bureaucratic Workflow Management System — Managing matters,
+    voting, resolutions, and ICJ cases across the six principal UN organs.">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages.css">
 </head>
+
 <body>
-    <div id="toast-container"></div>
-    <div class="app-container">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <span class="logo-icon">🌐</span>
-                    <span class="logo-text">UN Workflow</span>
-                </div>
-            </div>
-            <nav class="sidebar-nav">
-                <ul class="nav-list">
-                    <li><a href="#dashboard" class="nav-link active" data-page="dashboard">📊 Dashboard</a></li>
-                    <li><a href="#organs" class="nav-link" data-page="organs">🏛️ UN Organs</a></li>
-                    <li><a href="#matters" class="nav-link" data-page="matters">📋 Matters</a></li>
-                    <li><a href="#voting" class="nav-link" data-page="voting">🗳️ Voting</a></li>
-                    <li><a href="#resolutions" class="nav-link" data-page="resolutions">📜 Resolutions</a></li>
-                    <li><a href="#icj" class="nav-link" data-page="icj">⚖️ ICJ Cases</a></li>
-                    <li><a href="#secretariat" class="nav-link" data-page="secretariat">🏢 Secretariat</a></li>
-                    <li><a href="#trusteeship" class="nav-link" data-page="trusteeship">🗺️ Trusteeship</a></li>
-                    <li><a href="#audit" class="nav-link" data-page="audit">📝 Audit Log</a></li>
-                </ul>
-            </nav>
-        </aside>
-        <main class="main-content">
-            <header class="top-bar">
-                <div class="page-title"><h1 id="page-title">Dashboard</h1></div>
-                <div class="top-bar-actions">
-                    <input type="text" placeholder="Search..." id="global-search">
-                    <button class="btn-icon">🔔</button>
-                </div>
-            </header>
-            <div class="content-area" id="content-area"></div>
-        </main>
-    </div>
-    <div class="modal-overlay" id="modal-overlay">
-        <div class="modal" id="modal">
-            <div class="modal-header">
-                <h2 id="modal-title">Modal</h2>
-                <button class="modal-close" id="modal-close">&times;</button>
-            </div>
-            <div class="modal-body" id="modal-body"></div>
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__text">UNITED NATIONS</div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="main-nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">
+        <div class="nav__logo-icon">UN</div>
+        <div>
+          <div class="nav__logo-text">United Nations</div>
+          <div class="nav__logo-sub">Workflow System</div>
         </div>
+      </a>
+      <div class="nav__links">
+        <a href="#pulse" class="nav__link active" data-section="pulse">Global Pulse</a>
+        <a href="#organs" class="nav__link" data-section="organs">Organs</a>
+        <a href="organs/general-assembly.html" class="nav__link">GA</a>
+        <a href="organs/security-council.html" class="nav__link">SC</a>
+        <a href="login.html?tab=delegate" class="nav__link" style="color:var(--color-gold)">
+            🌐 Vote</a>
+        <a href="login.html?tab=admin" class="nav__link" style="color:var(--color-gold)">
+            🛡 Admin</a>
+      </div>
     </div>
-    <script src="js/api.js"></script>
-    <script src="js/app.js"></script>
+  </nav>
+
+  <!-- Hero Section with particle canvas -->
+  <section class="hero" id="hero">
+    <div class="hero__bg">
+      <img class="hero__bg-image" src="images/hero-bg.png" alt="" loading="eager">
+      <div class="hero__bg-overlay"></div>
+    </div>
+    <canvas class="hero__particles" id="hero-canvas"></canvas>
+    <div class="hero__content">
+      <p class="hero__eyebrow">Established 1945 · 193 Member States</p>
+      <h1 class="hero__title">
+        <span>UNITED</span>
+        <span class="t-outline">NATIONS</span>
+      </h1>
+      <div class="hero__cta">
+        <a href="#organs" class="btn btn-gold">Explore Organs</a>
+        <a href="#pulse" class="btn btn-outline">Global Pulse ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- UN Organs — 3D Card Grid (6 cards linking to dedicated pages) -->
+  <section class="organs-section" id="organs">
+    <div class="container">
+      <div class="organs__grid perspective-container" id="organs-grid">
+        <a href="organs/general-assembly.html" class="organ-card tilt-card" data-organ="GA">
+          <div class="organ-card__bg">
+            <img src="images/general-assembly.png" alt="General Assembly Hall">
+          </div>
+          <div class="organ-card__content">
+            <div class="organ-card__code">GA · Est. 1945</div>
+            <h3 class="organ-card__name">General Assembly</h3>
+            <p class="organ-card__desc">All 193 Member States have equal representation.</p>
+            <span class="organ-card__arrow">Explore →</span>
+          </div>
+        </a>
+        <!-- Security Council, ECOSOC, ICJ, Secretariat, Trusteeship cards follow
+             the same pattern, each linking to its dedicated /organs/*.html page -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/hero.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
 ```
 
-#### 6.1.2 CSS Design System (styles.css excerpt)
+#### 6.1.2 CSS Design System (main.css excerpt)
+
+The design system is built on CSS custom properties (design tokens) covering color palette, typography (3 font families), spacing, glassmorphism, 3D perspective, and scroll-triggered animation states.
 
 ```css
+/* Google Fonts — Display, Body, Monospace */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700
+  &family=Inter:wght@300;400;500;600;700
+  &family=JetBrains+Mono:wght@300;400;500&display=swap');
+
 :root {
-    --primary: #009edb; /* UN Blue */
-    --bg-darkest: #0a0e17;
-    --bg-card: #1a2332;
-    --text-primary: #ffffff;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
+  /* Colors */
+  --color-bg-primary:    #0a0e17;
+  --color-bg-secondary:  #0f1520;
+  --color-bg-glass:      rgba(255,255,255,0.04);
+  --color-border-glass:  rgba(255,255,255,0.08);
+  --color-gold:          #c9a84c;
+  --color-blue-un:       #4b9cd3;
+  --color-red:           #e85555;
+  --color-green:         #5ecc6e;
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Inter', -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  --fs-hero: clamp(3.5rem, 10vw, 9rem);
+  --fs-h1:   clamp(2.5rem, 5vw, 5rem);
+
+  /* Glass */
+  --glass-blur: blur(20px);
+
+  /* Organ accent colors */
+}
+[data-organ="GA"]  { --organ-color: #4b9cd3; }
+[data-organ="SC"]  { --organ-color: #e85555; }
+[data-organ="ECOSOC"] { --organ-color: #3ecfb4; }
+[data-organ="ICJ"] { --organ-color: #c9a84c; }
+[data-organ="SEC"] { --organ-color: #a78bfa; }
+[data-organ="TC"]  { --organ-color: #f59e0b; }
+
+/* Glassmorphism cards */
+.glass-card {
+  background: var(--color-bg-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border-glass);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
 }
 
-.sidebar {
-    width: 260px;
-    background: rgba(26, 35, 50, 0.85);
-    backdrop-filter: blur(20px);
+.glass-card:hover {
+  border-color: rgba(201,168,76,0.2);
+  box-shadow: 0 0 40px rgba(201,168,76,0.15);
 }
 
-.stat-card {
-    background: var(--bg-card);
-    border-radius: 12px;
-    padding: 24px;
-    transition: transform 0.25s ease;
+/* Scroll-triggered reveal animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+              transform 0.8s cubic-bezier(0.16,1,0.3,1);
 }
 
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 0 20px rgba(0, 158, 219, 0.3);
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.badge {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 ```
 
 #### 6.1.3 JavaScript Application Logic (app.js excerpt)
 
-```javascript
-const App = {
-    currentPage: 'dashboard',
-    
-    init() {
-        this.bindEvents();
-        this.handleRoute();
-        window.addEventListener('hashchange', () => this.handleRoute());
-    },
-    
-    async renderDashboard() {
-        const [stats, activity] = await Promise.all([
-            API.dashboard.getStats(),
-            API.dashboard.getActivity()
-        ]);
-        
-        document.getElementById('content-area').innerHTML = `
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">📋</div>
-                    <div class="stat-value">${stats.total_matters}</div>
-                    <div class="stat-label">Total Matters</div>
-                </div>
-                <!-- More stat cards -->
-            </div>
-        `;
-    },
-    
-    async showVotingDetail(matterId) {
-        const data = await API.voting.getMatterVotes(matterId);
-        this.showModal(`Voting: ${data.summary.matter_number}`, `
-            <div class="vote-summary">
-                <div class="vote-stat yes">${data.summary.yes_votes} YES</div>
-                <div class="vote-stat no">${data.summary.no_votes} NO</div>
-                <div class="vote-stat abstain">${data.summary.abstentions} ABSTAIN</div>
-            </div>
-        `);
-    }
-};
+The main entry point initializes Lenis smooth scrolling, connects it to GSAP's ScrollTrigger for synchronized animations, and orchestrates GSAP stagger animations on organ cards and ICJ case cards.
 
-document.addEventListener('DOMContentLoaded', () => App.init());
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  // Preloader
+  const preloader = document.getElementById('preloader');
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      if (preloader) {
+        preloader.classList.add('loaded');
+        setTimeout(() => preloader.remove(), 600);
+      }
+    }, 800);
+  });
+
+  // Lenis smooth scroll
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    wheelMultiplier: 1,
+  });
+
+  // Connect Lenis to GSAP ScrollTrigger
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  // Initialize navigation and animation engine modules
+  const nav = new Navigation();
+  const animations = new AnimationEngine();
+
+  // GSAP organ card stagger entrance
+  const organCards = document.querySelectorAll('.organ-card');
+  if (organCards.length) {
+    gsap.from(organCards, {
+      y: 80, opacity: 0, rotateX: -10,
+      stagger: 0.1, duration: 1, ease: 'expo.out',
+      scrollTrigger: {
+        trigger: '.organs__grid',
+        start: 'top 80%',
+        toggleActions: 'play none none reverse',
+      },
+    });
+  }
+});
 ```
 
 ### 6.2 Backend Code and Database Connectivity
 
-**Technology Stack**: Node.js, Express.js, mysql2 driver
+**Technology Stack**: Node.js 20+, Express.js 4.x, mysql2/promise, bcryptjs, jsonwebtoken (JWT)
 
 #### 6.2.1 Database Connectivity (config/db.js)
+
+The database module creates a mysql2 connection pool with keep-alive support, tests connectivity on startup, and exports a `withTransaction` helper that handles `BEGIN → COMMIT/ROLLBACK → RELEASE` lifecycle along with a `query` wrapper for single-statement execution.
 
 ```javascript
 const mysql = require('mysql2/promise');
@@ -172,10 +252,23 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME || 'un_workflow_db',
     port: process.env.DB_PORT || 3306,
     waitForConnections: true,
-    connectionLimit: 10
+    connectionLimit: 10,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
 });
 
-// Transaction helper
+// Test connection on startup
+pool.getConnection()
+    .then(connection => {
+        console.log('✓ Database connected successfully');
+        connection.release();
+    })
+    .catch(err => {
+        console.error('✗ Database connection failed:', err.message);
+    });
+
+// Transaction helper — ACID-compliant wrapper
 async function withTransaction(callback) {
     const connection = await pool.getConnection();
     await connection.beginTransaction();
@@ -191,22 +284,43 @@ async function withTransaction(callback) {
     }
 }
 
+// Query helper with error logging
+async function query(sql, params = []) {
+    try {
+        const [rows] = await pool.execute(sql, params);
+        return rows;
+    } catch (error) {
+        console.error('Query Error:', error.message);
+        throw error;
+    }
+}
+
 module.exports = { pool, query, withTransaction };
 ```
 
 #### 6.2.2 Express Server (server.js)
 
+The server registers 11 API route modules, serves the frontend as static files, includes a health check endpoint, global error handling middleware, and a catch-all SPA route.
+
 ```javascript
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// API Routes
+// API Routes — 11 route modules
+app.use('/api/auth', require('./routes/auth'));
 app.use('/api/organs', require('./routes/organs'));
 app.use('/api/matters', require('./routes/matters'));
 app.use('/api/voting', require('./routes/voting'));
@@ -216,41 +330,67 @@ app.use('/api/secretariat', require('./routes/secretariat'));
 app.use('/api/trusteeship', require('./routes/trusteeship'));
 app.use('/api/audit', require('./routes/audit'));
 app.use('/api/dashboard', require('./routes/dashboard'));
+app.use('/api/announcements', require('./routes/announcements'));
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Server Error:', err);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
 ```
 
 #### 6.2.3 Voting Routes with Concurrency Control (routes/voting.js)
 
+The voting route implements JWT-authenticated, role-guarded vote casting with `SELECT ... FOR UPDATE` row-level locking to prevent the double-vote race condition. The `requireDelegate` middleware ensures only delegates can cast votes, and an identity check prevents delegates from voting on behalf of other delegations.
+
 ```javascript
 const express = require('express');
 const router = express.Router();
-const { query, withTransaction } = require('../config/db');
+const { query, withTransaction, pool } = require('../config/db');
+const { requireAuth, requireAdmin, requireDelegate } = require('../middleware/auth');
 
-// Cast vote with concurrency protection
-router.post('/', async (req, res) => {
+// POST cast a vote — delegate authentication required
+router.post('/', requireAuth, requireDelegate, async (req, res) => {
     try {
         const result = await withTransaction(async (connection) => {
             const { matter_id, state_id, delegate_id, vote_value } = req.body;
 
+            // Security: delegate can only vote as themselves
+            if (req.user.delegate_id !== delegate_id) {
+                throw new Error('You can only cast votes on behalf of your own delegation.');
+            }
+
             // Lock the matter row to check status
             const [[matter]] = await connection.execute(
-                'SELECT status FROM matter WHERE matter_id = ? FOR UPDATE',
+                'SELECT status, requires_voting FROM matter WHERE matter_id = ? FOR UPDATE',
                 [matter_id]
             );
 
+            if (!matter) throw new Error('Matter not found');
             if (matter.status !== 'IN_VOTING') {
                 throw new Error('Matter is not in voting stage');
             }
 
-            // Check for existing vote (with lock)
+            // Check for existing vote from this state (with lock)
             const [[existingVote]] = await connection.execute(
                 'SELECT vote_id FROM vote WHERE matter_id = ? AND state_id = ? FOR UPDATE',
                 [matter_id, state_id]
             );
 
             if (existingVote) {
-                throw new Error('This state has already voted');
+                throw new Error('This state has already voted on this matter');
             }
 
             // Cast the vote
@@ -259,41 +399,13 @@ router.post('/', async (req, res) => {
                 [matter_id, state_id, delegate_id, vote_value]
             );
 
-            return { vote_id: insertResult.insertId };
+            return { vote_id: insertResult.insertId, vote_value };
         });
 
         res.status(201).json(result);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
-});
-
-// Compute vote outcome
-router.post('/matter/:matterId/compute', async (req, res) => {
-    const result = await withTransaction(async (connection) => {
-        const [[matter]] = await connection.execute(
-            'SELECT * FROM matter WHERE matter_id = ? FOR UPDATE',
-            [req.params.matterId]
-        );
-
-        const [[votes]] = await connection.execute(`
-            SELECT 
-                SUM(CASE WHEN vote_value = 'YES' THEN 1 ELSE 0 END) AS yes_count,
-                SUM(CASE WHEN vote_value = 'NO' THEN 1 ELSE 0 END) AS no_count
-            FROM vote WHERE matter_id = ? AND is_valid = TRUE
-        `, [req.params.matterId]);
-
-        const passed = (votes.yes_count * 100 / (votes.yes_count + votes.no_count)) >= matter.voting_threshold;
-        
-        await connection.execute(
-            'UPDATE matter SET status = ? WHERE matter_id = ?',
-            [passed ? 'PASSED' : 'REJECTED', req.params.matterId]
-        );
-
-        return { outcome: passed ? 'PASSED' : 'REJECTED', yes: votes.yes_count, no: votes.no_count };
-    });
-
-    res.json(result);
 });
 
 module.exports = router;
@@ -306,7 +418,9 @@ module.exports = router;
 router.get('/matter/:matterId/tally', async (req, res) => {
     try {
         await pool.execute('CALL sp_vote_tally(?, @yes, @no, @abstain)', [req.params.matterId]);
-        const [[result]] = await pool.execute('SELECT @yes AS yes, @no AS no, @abstain AS abstain');
+        const [[result]] = await pool.execute(
+            'SELECT @yes AS yes, @no AS no, @abstain AS abstain'
+        );
         res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
