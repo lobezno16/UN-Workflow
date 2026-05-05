@@ -45,10 +45,12 @@
     </div>
     <div class="container organ-hero__content">
       <a href="../index.html" class="back-link">← Back to Home</a>
-      <div class="organ-hero__code">ECOSOC · 54 Member States · New York</div>
+      <div class="organ-hero__code">ECOSOC · 54 Elected Members · New York</div>
       <h1 class="organ-hero__title">Economic & Social Council</h1>
       <p class="organ-hero__desc">
-        The principal body for coordination, policy review, and recommendations on economic, social, and environmental issues, including implementation of the Sustainable Development Goals.
+        The principal body for coordination, policy review, and recommendations on economic, social, 
+        and environmental issues, including implementation of the Sustainable Development Goals.
+        President (2025–2026): <strong>Lok Bahadur Thapa</strong> (Nepal).
       </p>
     </div>
   </section>
@@ -57,19 +59,24 @@
     <div class="container">
       <div class="info-grid reveal">
         <div class="info-card">
-          <div class="info-card__label">Active Decisions</div>
-          <div class="info-card__value">1</div>
-          <div class="info-card__detail">SDG Review under deliberation</div>
+          <div class="info-card__label">Elected Members</div>
+          <div class="info-card__value">54</div>
+          <div class="info-card__detail">3-year staggered terms</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">Status</div>
-          <div class="info-card__value" style="font-size: var(--fs-h3);">Under Review</div>
-          <div class="info-card__detail">2024 Session</div>
+          <div class="info-card__label">President</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">L. B. Thapa</div>
+          <div class="info-card__detail">Nepal · 2025–2026</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">Focus Area</div>
-          <div class="info-card__value" style="font-size: var(--fs-h3);">SDGs</div>
-          <div class="info-card__detail">Sustainable Development Goals</div>
+          <div class="info-card__label">Motto</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">Delivering Better</div>
+          <div class="info-card__detail">2025–2026 Presidential Theme</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card__label">HLPF Focus</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">5 SDGs</div>
+          <div class="info-card__detail">In-depth review 2025</div>
         </div>
       </div>
     </div>
@@ -77,24 +84,129 @@
 
   <section class="organ-content">
     <div class="container">
+      <!-- Active Matters (Dynamic - card layout) -->
       <div class="organ-section">
         <div class="organ-section__header reveal">
           <h2 class="organ-section__title">Current Decisions</h2>
         </div>
         <div id="dynamic-matters-container">
-          <div class="glass-card reveal">
-            <div class="t-mono" style="color: var(--color-teal); margin-bottom: 0.5rem;">ECOSOC/DEC/2024/201</div>
-            <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Sustainable Development Goals Review</h3>
-            <p class="t-secondary" style="margin-bottom: var(--space-sm);">
-              Reviews progress on SDGs and recommends accelerated action across all member nations. 
-              Submitted by Ambassador Ruchira Kamboj (India) during the 2024 session.
-            </p>
-            <div class="flex gap-sm" style="flex-wrap: wrap;">
-              <span class="badge badge--pending">Under Review</span>
-              <span class="badge badge--active">High Priority</span>
-              <span class="badge badge--closed">Requires Voting</span>
-            </div>
+          <!-- Populated dynamically from database -->
+        </div>
+      </div>
+
+      <!-- SDG FOCUS AREAS 2025 -->
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">2025 HLPF — SDG In-Depth Reviews</h2>
+        </div>
+        <div class="data-table-wrapper reveal">
+          <table class="data-table">
+            <thead>
+              <tr><th>SDG</th><th>Goal Title</th><th>Focus</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge--active">SDG 3</span></td>
+                <td>Good Health & Well-being</td>
+                <td>Pandemic preparedness, universal health coverage</td>
+                <td><span class="badge badge--pending">Under Review</span></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge--active">SDG 5</span></td>
+                <td>Gender Equality</td>
+                <td>Women in leadership, ending gender-based violence</td>
+                <td><span class="badge badge--pending">Under Review</span></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge--active">SDG 8</span></td>
+                <td>Decent Work & Economic Growth</td>
+                <td>Youth employment, digital economy transitions</td>
+                <td><span class="badge badge--pending">Under Review</span></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge--active">SDG 14</span></td>
+                <td>Life Below Water</td>
+                <td>Ocean conservation, marine biodiversity</td>
+                <td><span class="badge badge--pending">Under Review</span></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge--active">SDG 17</span></td>
+                <td>Partnerships for the Goals</td>
+                <td>International cooperation, financing for development</td>
+                <td><span class="badge badge--pending">Under Review</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PRESIDENTIAL PRIORITIES -->
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">Presidential Priorities (2025–2026)</h2>
+        </div>
+        <div class="info-grid reveal">
+          <div class="glass-card">
+            <div class="t-label" style="margin-bottom: 0.25rem; color: var(--color-teal);">Priority 1</div>
+            <h3>Transforming Agriculture</h3>
+            <div class="t-secondary" style="font-size: var(--fs-small);">Strengthen rural resilience and end hunger</div>
           </div>
+          <div class="glass-card">
+            <div class="t-label" style="margin-bottom: 0.25rem; color: var(--color-teal);">Priority 2</div>
+            <h3>Digital Entrepreneurship</h3>
+            <div class="t-secondary" style="font-size: var(--fs-small);">Youth engagement and leveraging the "youth bulge"</div>
+          </div>
+          <div class="glass-card">
+            <div class="t-label" style="margin-bottom: 0.25rem; color: var(--color-teal);">Priority 3</div>
+            <h3>Climate Resilience</h3>
+            <div class="t-secondary" style="font-size: var(--fs-small);">Focus on glacier lakes and flood preparedness</div>
+          </div>
+          <div class="glass-card">
+            <div class="t-label" style="margin-bottom: 0.25rem; color: var(--color-teal);">Priority 4</div>
+            <h3>Financial Architecture Reform</h3>
+            <div class="t-secondary" style="font-size: var(--fs-small);">More inclusive international financial systems</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEMBER STATES BY REGION -->
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">Seat Allocation by Region</h2>
+        </div>
+        <div class="data-table-wrapper reveal">
+          <table class="data-table">
+            <thead>
+              <tr><th>Regional Group</th><th>Seats</th><th>Representative Members</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>African States</td>
+                <td>14</td>
+                <td>Nigeria, South Africa, Kenya, Egypt, Morocco, Ethiopia</td>
+              </tr>
+              <tr>
+                <td>Asia-Pacific States</td>
+                <td>11</td>
+                <td>China, India, Japan, South Korea, Pakistan, Indonesia</td>
+              </tr>
+              <tr>
+                <td>Eastern European States</td>
+                <td>6</td>
+                <td>Russia, Poland, Czech Republic, Romania</td>
+              </tr>
+              <tr>
+                <td>Latin American & Caribbean</td>
+                <td>10</td>
+                <td>Brazil, Mexico, Argentina, Colombia</td>
+              </tr>
+              <tr>
+                <td>Western European & Others</td>
+                <td>13</td>
+                <td>USA, UK, France, Germany, Canada, Australia</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

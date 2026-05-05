@@ -53,11 +53,12 @@
     </div>
     <div class="container organ-hero__content">
       <a href="../index.html" class="back-link">← Back to Home</a>
-      <div class="organ-hero__code">GA · Established 1945 · New York, USA</div>
+      <div class="organ-hero__code">GA · 80th Session · New York, USA</div>
       <h1 class="organ-hero__title">General Assembly</h1>
       <p class="organ-hero__desc">
         The main deliberative, policymaking, and representative organ of the United Nations. 
-        All 193 Member States have equal representation — one nation, one vote.
+        All 193 Member States have equal representation — one nation, one vote. 
+        President of the 80th Session: <strong>Annalena Baerbock</strong> (Germany).
       </p>
     </div>
   </section>
@@ -67,36 +68,36 @@
     <div class="container">
       <div class="info-grid reveal">
         <div class="info-card">
-          <div class="info-card__label">Active Matters</div>
-          <div class="info-card__value">3</div>
-          <div class="info-card__detail">Proposals under deliberation</div>
+          <div class="info-card__label">Member States</div>
+          <div class="info-card__value">193</div>
+          <div class="info-card__detail">Equal representation</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">Resolutions Passed</div>
-          <div class="info-card__value">1</div>
-          <div class="info-card__detail">A/RES/78/1 — Climate Action</div>
+          <div class="info-card__label">Current Session</div>
+          <div class="info-card__value">80th</div>
+          <div class="info-card__detail">Since September 2025</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">In Voting</div>
-          <div class="info-card__value">1</div>
-          <div class="info-card__detail">Digital Cooperation resolution</div>
+          <div class="info-card__label">GA President</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">A. Baerbock</div>
+          <div class="info-card__detail">Germany</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">Active Delegates</div>
-          <div class="info-card__value">15</div>
-          <div class="info-card__detail">Permanent representatives</div>
+          <div class="info-card__label">Voting Threshold</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">⅔ / Simple</div>
+          <div class="info-card__detail">Important / Other matters</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- MATTERS TABLE -->
+  <!-- ACTIVE MATTERS TABLE (Dynamic) -->
   <section class="organ-content">
     <div class="container">
       <div class="organ-section">
         <div class="organ-section__header reveal">
           <h2 class="organ-section__title">Active Matters</h2>
-          <span class="t-label">GA/78th Session</span>
+          <span class="t-label">GA/80th Session</span>
         </div>
         <div class="data-table-wrapper reveal">
           <table class="data-table">
@@ -111,81 +112,89 @@
               </tr>
             </thead>
             <tbody id="dynamic-matters-tbody">
-              <tr>
-                <td class="t-mono">GA/RES/78/001</td>
-                <td>Resolution on Climate Action Acceleration</td>
-                <td><span class="badge badge--active">Resolution</span></td>
-                <td>High</td>
-                <td><span class="badge badge--passed">Passed</span></td>
-                <td>Linda Thomas-Greenfield (USA)</td>
-              </tr>
-              <tr>
-                <td class="t-mono">GA/RES/78/002</td>
-                <td>Resolution on Digital Cooperation</td>
-                <td><span class="badge badge--active">Resolution</span></td>
-                <td>Medium</td>
-                <td><span class="badge badge--pending">In Voting</span></td>
-                <td>Antje Leendertse (Germany)</td>
-              </tr>
+              <!-- Populated dynamically from database -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- RESOLUTIONS -->
+      <!-- KEY RECENT RESOLUTIONS -->
       <div class="organ-section">
         <div class="organ-section__header reveal">
-          <h2 class="organ-section__title">Adopted Resolutions</h2>
+          <h2 class="organ-section__title">Key Recent Resolutions (79th Session)</h2>
         </div>
-        <div class="glass-card reveal">
-          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">A/RES/78/1</div>
-          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Climate Action Acceleration</h3>
+
+        <div class="glass-card reveal" style="margin-bottom: var(--space-md);">
+          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">A/RES/79/314</div>
+          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Agreement under UNCLOS on Marine Biodiversity (BBNJ)</h3>
           <p class="t-secondary" style="margin-bottom: var(--space-sm);">
-            <em>The General Assembly, recalling the Paris Agreement and its goals, deeply concerned by 
-            the accelerating impacts of climate change, recognizing the need for urgent and ambitious 
-            action...</em>
-          </p>
-          <p style="margin-bottom: var(--space-sm);">
-            1. Calls upon all Member States to enhance their nationally determined contributions;<br>
-            2. Urges developed countries to fulfill climate finance commitments;<br>
-            3. Encourages technology transfer for climate adaptation;<br>
-            4. Requests the Secretary-General to report on implementation progress.
+            <em>The General Assembly, recognizing the importance of the conservation and sustainable use 
+            of marine biological diversity of areas beyond national jurisdiction...</em>
           </p>
           <div class="flex gap-sm" style="flex-wrap: wrap;">
-            <span class="badge badge--passed">14 Yes</span>
-            <span class="badge badge--closed">0 No</span>
-            <span class="badge badge--pending">1 Abstain</span>
+            <span class="badge badge--passed">Adopted by Consensus</span>
             <span class="badge badge--active">In Force</span>
+          </div>
+        </div>
+
+        <div class="glass-card reveal">
+          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">A/RES/ES-10/24</div>
+          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Humanitarian Ceasefire in Gaza</h3>
+          <p class="t-secondary" style="margin-bottom: var(--space-sm);">
+            <em>Emergency Special Session resolution demanding an immediate, durable, and sustained 
+            humanitarian ceasefire and the unconditional release of all hostages...</em>
+          </p>
+          <div class="flex gap-sm" style="flex-wrap: wrap;">
+            <span class="badge badge--passed">153 Yes</span>
+            <span class="badge badge--closed">10 No</span>
+            <span class="badge badge--pending">23 Abstain</span>
           </div>
         </div>
       </div>
 
-      <!-- VOTE TIMELINE -->
+      <!-- REGIONAL GROUPS -->
       <div class="organ-section">
         <div class="organ-section__header reveal">
-          <h2 class="organ-section__title">Voting Record — Climate Action</h2>
+          <h2 class="organ-section__title">Regional Groups</h2>
         </div>
-        <div class="timeline reveal">
-          <div class="timeline__item">
-            <div class="timeline__date">2024-09-28</div>
-            <div class="timeline__title">Resolution Adopted</div>
-            <div class="timeline__desc">A/RES/78/1 adopted with 14 votes in favor, 1 abstention</div>
-          </div>
-          <div class="timeline__item">
-            <div class="timeline__date">2024-09-27</div>
-            <div class="timeline__title">Voting Completed</div>
-            <div class="timeline__desc">All 15 eligible states cast their votes</div>
-          </div>
-          <div class="timeline__item">
-            <div class="timeline__date">2024-09-26</div>
-            <div class="timeline__title">Approved for Vote</div>
-            <div class="timeline__desc">Secretary-General approved the matter for General Assembly vote</div>
-          </div>
-          <div class="timeline__item">
-            <div class="timeline__date">2024-09-15</div>
-            <div class="timeline__title">Matter Submitted</div>
-            <div class="timeline__desc">Submitted by Ambassador Linda Thomas-Greenfield (USA)</div>
-          </div>
+        <div class="data-table-wrapper reveal">
+          <table class="data-table">
+            <thead>
+              <tr><th>Regional Group</th><th>Member Count</th><th>Key Members</th><th>GA Seats Allocated</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>African States</td>
+                <td>54</td>
+                <td>Nigeria, South Africa, Kenya, Egypt, Ethiopia</td>
+                <td>13</td>
+              </tr>
+              <tr>
+                <td>Asia-Pacific States</td>
+                <td>53</td>
+                <td>China, India, Japan, South Korea, Indonesia</td>
+                <td>13</td>
+              </tr>
+              <tr>
+                <td>Eastern European States</td>
+                <td>23</td>
+                <td>Russia, Poland, Ukraine, Czech Republic, Romania</td>
+                <td>6</td>
+              </tr>
+              <tr>
+                <td>Latin American & Caribbean (GRULAC)</td>
+                <td>33</td>
+                <td>Brazil, Mexico, Argentina, Colombia, Chile</td>
+                <td>10</td>
+              </tr>
+              <tr>
+                <td>Western European & Others (WEOG)</td>
+                <td>28</td>
+                <td>USA, UK, France, Germany, Australia, Canada</td>
+                <td>7</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

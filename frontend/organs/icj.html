@@ -49,7 +49,8 @@
       <h1 class="organ-hero__title">International Court of Justice</h1>
       <p class="organ-hero__desc">
         The principal judicial organ of the United Nations. Settles legal disputes between States 
-        and gives advisory opinions on legal questions referred by UN organs.
+        and gives advisory opinions on legal questions referred by UN organs. 
+        President: <strong>Yuji Iwasawa</strong> (Japan), since March 2025.
       </p>
     </div>
   </section>
@@ -58,24 +59,24 @@
     <div class="container">
       <div class="info-grid reveal">
         <div class="info-card">
-          <div class="info-card__label">Active Cases</div>
-          <div class="info-card__value">3</div>
-          <div class="info-card__detail">2 contentious, 1 advisory</div>
-        </div>
-        <div class="info-card">
           <div class="info-card__label">Judges</div>
-          <div class="info-card__value">10</div>
-          <div class="info-card__detail">Serving on the bench</div>
+          <div class="info-card__value">15</div>
+          <div class="info-card__detail">9-year terms, staggered</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">Hearings Held</div>
-          <div class="info-card__value">6</div>
-          <div class="info-card__detail">All transcripts available</div>
+          <div class="info-card__label">President</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">Y. Iwasawa</div>
+          <div class="info-card__detail">Japan · Until Feb 2027</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">Judgments</div>
-          <div class="info-card__value">1</div>
-          <div class="info-card__detail">Provisional measures ordered</div>
+          <div class="info-card__label">Vice-President</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">J. Sebutinde</div>
+          <div class="info-card__detail">Uganda</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card__label">Decisions are</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">Binding</div>
+          <div class="info-card__detail">No appeal possible</div>
         </div>
       </div>
     </div>
@@ -83,7 +84,7 @@
 
   <section class="organ-content">
     <div class="container">
-      <!-- Cases -->
+      <!-- Active Cases (Dynamic) -->
       <div class="organ-section">
         <div class="organ-section__header reveal">
           <h2 class="organ-section__title">Active Cases</h2>
@@ -94,84 +95,110 @@
               <tr><th>Case No.</th><th>Title</th><th>Type</th><th>Status</th><th>Hearings</th></tr>
             </thead>
             <tbody id="dynamic-matters-tbody">
-              <tr>
-                <td class="t-mono">ICJ/2024/001</td>
-                <td>Maritime Boundary Dispute (Country A v. Country B)</td>
-                <td><span class="badge badge--active">Contentious</span></td>
-                <td><span class="badge badge--pending">Hearing</span></td>
-                <td>3</td>
-              </tr>
-              <tr>
-                <td class="t-mono">ICJ/2024/002</td>
-                <td>Application of Genocide Convention</td>
-                <td><span class="badge badge--active">Contentious</span></td>
-                <td><span class="badge badge--pending">Preliminary Objections</span></td>
-                <td>2</td>
-              </tr>
-              <tr>
-                <td class="t-mono">ICJ/2023/005</td>
-                <td>Advisory Opinion on Climate Obligations</td>
-                <td><span class="badge badge--closed">Advisory</span></td>
-                <td><span class="badge badge--pending">Deliberation</span></td>
-                <td>1</td>
-              </tr>
+              <!-- Populated dynamically -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Judges -->
+      <!-- KEY PENDING CASES (Real-world) -->
       <div class="organ-section">
         <div class="organ-section__header reveal">
-          <h2 class="organ-section__title">Bench</h2>
+          <h2 class="organ-section__title">Key Pending Cases (Real-World)</h2>
+        </div>
+
+        <div class="glass-card reveal" style="margin-bottom: var(--space-md);">
+          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">Application of the Genocide Convention (South Africa v. Israel)</div>
+          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Genocide in the Gaza Strip</h3>
+          <p class="t-secondary" style="margin-bottom: var(--space-sm);">
+            South Africa instituted proceedings alleging violations of the Convention on the Prevention 
+            and Punishment of the Crime of Genocide. Provisional measures ordered in January, March, and May 2024. 
+            Israel filed its counter-memorial on March 12, 2026. Multiple states have filed declarations of intervention.
+          </p>
+          <div class="flex gap-sm" style="flex-wrap: wrap;">
+            <span class="badge badge--active">Contentious</span>
+            <span class="badge badge--pending">Merits Phase</span>
+            <span class="badge badge--passed">Provisional Measures Ordered</span>
+          </div>
+        </div>
+
+        <div class="glass-card reveal" style="margin-bottom: var(--space-md);">
+          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">Allegations of Genocide (Ukraine v. Russian Federation)</div>
+          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Misuse of Genocide Convention — Armed Invasion</h3>
+          <p class="t-secondary" style="margin-bottom: var(--space-sm);">
+            Ukraine alleges Russia falsely invoked the Genocide Convention to justify its armed invasion.
+            In December 2025, the ICJ admitted eight Russian counter-claims as admissible. 
+            Next deadline: Ukraine to respond by December 7, 2026.
+          </p>
+          <div class="flex gap-sm" style="flex-wrap: wrap;">
+            <span class="badge badge--active">Contentious</span>
+            <span class="badge badge--pending">Counter-claims Phase</span>
+          </div>
+        </div>
+
+        <div class="glass-card reveal" style="margin-bottom: var(--space-md);">
+          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">Application of the Genocide Convention (The Gambia v. Myanmar)</div>
+          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Rohingya Genocide Allegations</h3>
+          <p class="t-secondary" style="margin-bottom: var(--space-sm);">
+            The Gambia filed proceedings alleging genocide against the Rohingya Muslim group in Rakhine State.
+            Oral proceedings held in early 2026. Provisional measures remain in force.
+          </p>
+          <div class="flex gap-sm" style="flex-wrap: wrap;">
+            <span class="badge badge--active">Contentious</span>
+            <span class="badge badge--pending">Oral Proceedings</span>
+          </div>
+        </div>
+
+        <div class="glass-card reveal">
+          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">Arbitral Award of 3 October 1899 (Guyana v. Venezuela)</div>
+          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Essequibo Territory Sovereignty Dispute</h3>
+          <p class="t-secondary" style="margin-bottom: var(--space-sm);">
+            Guyana seeks confirmation of the validity of the 1899 Arbitral Award establishing the boundary with Venezuela.
+            Public hearings on the merits scheduled for May 2026.
+          </p>
+          <div class="flex gap-sm" style="flex-wrap: wrap;">
+            <span class="badge badge--active">Contentious</span>
+            <span class="badge badge--pending">Merits — Hearings Scheduled</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ICJ BENCH -->
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">Current Bench</h2>
         </div>
         <div class="data-table-wrapper reveal">
           <table class="data-table">
             <thead>
-              <tr><th>Name</th><th>Nationality</th><th>Role</th><th>Specialization</th><th>Term Ends</th></tr>
+              <tr><th>Name</th><th>Nationality</th><th>Role</th><th>Term Ends</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Nawaf Salam</td><td>Egypt</td>
+                <td>Yuji Iwasawa</td><td>🇯🇵 Japan</td>
                 <td><span class="badge badge--passed">President</span></td>
-                <td>Human Rights Law</td><td class="t-mono">2027</td>
+                <td class="t-mono">Feb 2030</td>
               </tr>
               <tr>
-                <td>Xue Hanqin</td><td>China</td>
+                <td>Julia Sebutinde</td><td>🇺🇬 Uganda</td>
                 <td><span class="badge badge--active">Vice-President</span></td>
-                <td>Treaty Law</td><td class="t-mono">2030</td>
+                <td class="t-mono">Feb 2030</td>
               </tr>
-              <tr><td>Joan Donoghue</td><td>USA</td><td>Judge</td><td>International Law</td><td class="t-mono">2024</td></tr>
-              <tr><td>Kirill Gevorgian</td><td>Russia</td><td>Judge</td><td>Maritime Law</td><td class="t-mono">2024</td></tr>
-              <tr><td>Julia Sebutinde</td><td>Nigeria</td><td>Judge</td><td>Criminal Law</td><td class="t-mono">2030</td></tr>
-              <tr><td>Dalveer Bhandari</td><td>India</td><td>Judge</td><td>Constitutional Law</td><td class="t-mono">2027</td></tr>
-              <tr><td>Yuji Iwasawa</td><td>Japan</td><td>Judge</td><td>Trade Law</td><td class="t-mono">2027</td></tr>
-              <tr><td>Peter Tomka</td><td>Russia</td><td>Judge</td><td>State Responsibility</td><td class="t-mono">2030</td></tr>
-              <tr><td>Mohamed Bennouna</td><td>Egypt</td><td>Judge</td><td>Use of Force</td><td class="t-mono">2024</td></tr>
-              <tr><td>Hilary Charlesworth</td><td>Australia</td><td>Judge</td><td>Human Rights</td><td class="t-mono">2030</td></tr>
+              <tr><td>Peter Tomka</td><td>🇸🇰 Slovakia</td><td>Judge</td><td class="t-mono">Feb 2030</td></tr>
+              <tr><td>Ronny Abraham</td><td>🇫🇷 France</td><td>Judge</td><td class="t-mono">Feb 2027</td></tr>
+              <tr><td>Xue Hanqin</td><td>🇨🇳 China</td><td>Judge</td><td class="t-mono">Feb 2030</td></tr>
+              <tr><td>Dalveer Bhandari</td><td>🇮🇳 India</td><td>Judge</td><td class="t-mono">Feb 2027</td></tr>
+              <tr><td>Georg Nolte</td><td>🇩🇪 Germany</td><td>Judge</td><td class="t-mono">Feb 2030</td></tr>
+              <tr><td>Phoebe N. Okowa</td><td>🇰🇪 Kenya</td><td>Judge</td><td class="t-mono">Feb 2033</td></tr>
+              <tr><td>Hilary Charlesworth</td><td>🇦🇺 Australia</td><td>Judge</td><td class="t-mono">Feb 2033</td></tr>
+              <tr><td>Leonardo Nemer Caldeira Brant</td><td>🇧🇷 Brazil</td><td>Judge</td><td class="t-mono">Feb 2033</td></tr>
+              <tr><td>Sarah Cleveland</td><td>🇺🇸 USA</td><td>Judge</td><td class="t-mono">Feb 2033</td></tr>
+              <tr><td>Juan Manuel Gómez Robledo</td><td>🇲🇽 Mexico</td><td>Judge</td><td class="t-mono">Feb 2033</td></tr>
+              <tr><td>Dire Tladi</td><td>🇿🇦 South Africa</td><td>Judge</td><td class="t-mono">Feb 2033</td></tr>
+              <tr><td>Bogdan-Lucian Aurescu</td><td>🇷🇴 Romania</td><td>Judge</td><td class="t-mono">Feb 2033</td></tr>
+              <tr><td>Philippe Gautier</td><td>🇧🇪 Belgium</td><td>Judge (Registrar)</td><td class="t-mono">Feb 2030</td></tr>
             </tbody>
           </table>
-        </div>
-      </div>
-
-      <!-- Judgment -->
-      <div class="organ-section">
-        <div class="organ-section__header reveal">
-          <h2 class="organ-section__title">Recent Judgment</h2>
-        </div>
-        <div class="glass-card reveal">
-          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">ICJ/JUD/2024/PM/001</div>
-          <h3 style="margin-bottom: 0.5rem;">Provisional Measures — Application of Genocide Convention</h3>
-          <p class="t-secondary" style="margin-bottom: var(--space-sm);">
-            The Court orders provisional measures requiring the respondent to take all measures 
-            within its power to prevent acts that could constitute genocide.
-          </p>
-          <div class="flex gap-sm" style="flex-wrap: wrap;">
-            <span class="badge badge--passed">15 For</span>
-            <span class="badge badge--rejected">2 Against</span>
-            <span class="badge badge--active">Binding</span>
-            <span class="badge badge--pending">Partial Compliance</span>
-          </div>
         </div>
       </div>
     </div>

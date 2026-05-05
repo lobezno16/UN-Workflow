@@ -48,11 +48,11 @@
     </div>
     <div class="container organ-hero__content">
       <a href="../index.html" class="back-link">← Back to Home</a>
-      <div class="organ-hero__code">SC · 5 Permanent Members · Veto Power</div>
+      <div class="organ-hero__code">SC · 15 Members · Veto Power (P5)</div>
       <h1 class="organ-hero__title">Security Council</h1>
       <p class="organ-hero__desc">
         Primary responsibility for the maintenance of international peace and security. 
-        Has 15 members including 5 permanent members (P5) with veto power: USA, China, Russia, UK, France.
+        Has 15 members: 5 permanent members (P5) with veto power and 10 elected non-permanent members serving 2-year terms.
       </p>
     </div>
   </section>
@@ -61,24 +61,24 @@
     <div class="container">
       <div class="info-grid reveal">
         <div class="info-card">
-          <div class="info-card__label">Active Resolutions</div>
-          <div class="info-card__value">2</div>
-          <div class="info-card__detail">Including 1 binding resolution</div>
+          <div class="info-card__label">Total Members</div>
+          <div class="info-card__value">15</div>
+          <div class="info-card__detail">5 permanent + 10 elected</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">Pending Approval</div>
-          <div class="info-card__value">1</div>
-          <div class="info-card__detail">Peacekeeping Mission Extension</div>
+          <div class="info-card__label">Voting Threshold</div>
+          <div class="info-card__value">9/15</div>
+          <div class="info-card__detail">Including all P5 (no veto)</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">Binding Resolutions</div>
-          <div class="info-card__value">1</div>
-          <div class="info-card__detail">S/RES/2712 — Humanitarian Pause</div>
+          <div class="info-card__label">Resolutions are</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">Binding</div>
+          <div class="info-card__detail">Under Chapter VII</div>
         </div>
         <div class="info-card">
-          <div class="info-card__label">Permanent Members</div>
-          <div class="info-card__value">5</div>
-          <div class="info-card__detail">USA, China, Russia, UK, France</div>
+          <div class="info-card__label">Presidency</div>
+          <div class="info-card__value" style="font-size: var(--fs-h3);">Monthly</div>
+          <div class="info-card__detail">Rotating alphabetically</div>
         </div>
       </div>
     </div>
@@ -86,6 +86,7 @@
 
   <section class="organ-content">
     <div class="container">
+      <!-- Active Matters (Dynamic) -->
       <div class="organ-section">
         <div class="organ-section__header reveal">
           <h2 class="organ-section__title">Matters & Resolutions</h2>
@@ -96,58 +97,117 @@
               <tr><th>Number</th><th>Title</th><th>Priority</th><th>Status</th><th>Binding</th></tr>
             </thead>
             <tbody id="dynamic-matters-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PERMANENT MEMBERS (P5) -->
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">Permanent Members (P5) — Veto Power</h2>
+        </div>
+        <div class="data-table-wrapper reveal">
+          <table class="data-table">
+            <thead>
+              <tr><th>Country</th><th>Permanent Representative</th><th>Veto Power</th><th>Member Since</th></tr>
+            </thead>
+            <tbody>
               <tr>
-                <td class="t-mono">SC/RES/2712</td>
-                <td>Resolution on Humanitarian Pause</td>
-                <td><span style="color: var(--color-red);">Critical</span></td>
-                <td><span class="badge badge--passed">Passed</span></td>
-                <td><span class="badge badge--active">Yes</span></td>
+                <td>🇺🇸 United States</td>
+                <td>Mike Waltz</td>
+                <td><span class="badge badge--closed">Yes</span></td>
+                <td class="t-mono">1945</td>
               </tr>
               <tr>
-                <td class="t-mono">SC/RES/2713</td>
-                <td>Peacekeeping Mission Extension</td>
-                <td>High</td>
-                <td><span class="badge badge--pending">Pending Approval</span></td>
-                <td>—</td>
+                <td>🇬🇧 United Kingdom</td>
+                <td>Barbara Woodward</td>
+                <td><span class="badge badge--closed">Yes</span></td>
+                <td class="t-mono">1945</td>
+              </tr>
+              <tr>
+                <td>🇫🇷 France</td>
+                <td>Jérôme Bonnafont</td>
+                <td><span class="badge badge--closed">Yes</span></td>
+                <td class="t-mono">1945</td>
+              </tr>
+              <tr>
+                <td>🇷🇺 Russian Federation</td>
+                <td>Vassily Nebenzia</td>
+                <td><span class="badge badge--closed">Yes</span></td>
+                <td class="t-mono">1945</td>
+              </tr>
+              <tr>
+                <td>🇨🇳 China</td>
+                <td>Fu Cong</td>
+                <td><span class="badge badge--closed">Yes</span></td>
+                <td class="t-mono">1945</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
+      <!-- NON-PERMANENT MEMBERS (E10) -->
       <div class="organ-section">
         <div class="organ-section__header reveal">
-          <h2 class="organ-section__title">Resolution S/RES/2712 — Humanitarian Pause</h2>
+          <h2 class="organ-section__title">Elected Non-Permanent Members (E10)</h2>
+        </div>
+        <div class="data-table-wrapper reveal">
+          <table class="data-table">
+            <thead>
+              <tr><th>Country</th><th>Regional Group</th><th>Term Ends</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>🇩🇿 Algeria</td><td>African</td><td class="t-mono">Dec 2025</td></tr>
+              <tr><td>🇬🇾 Guyana</td><td>GRULAC</td><td class="t-mono">Dec 2025</td></tr>
+              <tr><td>🇰🇷 Republic of Korea</td><td>Asia-Pacific</td><td class="t-mono">Dec 2025</td></tr>
+              <tr><td>🇸🇱 Sierra Leone</td><td>African</td><td class="t-mono">Dec 2025</td></tr>
+              <tr><td>🇸🇮 Slovenia</td><td>Eastern European</td><td class="t-mono">Dec 2025</td></tr>
+              <tr><td>🇩🇰 Denmark</td><td>WEOG</td><td class="t-mono">Dec 2026</td></tr>
+              <tr><td>🇬🇷 Greece</td><td>WEOG</td><td class="t-mono">Dec 2026</td></tr>
+              <tr><td>🇵🇰 Pakistan</td><td>Asia-Pacific</td><td class="t-mono">Dec 2026</td></tr>
+              <tr><td>🇵🇦 Panama</td><td>GRULAC</td><td class="t-mono">Dec 2026</td></tr>
+              <tr><td>🇸🇴 Somalia</td><td>African</td><td class="t-mono">Dec 2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RESOLUTION 2735 VOTING RECORD -->
+      <div class="organ-section">
+        <div class="organ-section__header reveal">
+          <h2 class="organ-section__title">Voting Record — S/RES/2735 (Gaza Ceasefire)</h2>
         </div>
         <div class="glass-card reveal">
-          <p class="t-secondary" style="margin-bottom: var(--space-sm); font-style: italic;">
-            The Security Council, gravely concerned by the humanitarian situation, reaffirming its 
-            commitment to international humanitarian law...
+          <div class="t-mono" style="color: var(--color-gold); margin-bottom: 0.5rem;">S/RES/2735 · Adopted June 10, 2024</div>
+          <h3 style="font-size: var(--fs-h3); margin-bottom: 0.5rem;">Ceasefire & Hostage Release in Gaza</h3>
+          <p class="t-secondary" style="margin-bottom: var(--space-sm);">
+            <em>The Security Council, welcoming the ceasefire proposal of 31 May 2024, 
+            calling for a comprehensive ceasefire deal consisting of three phases...</em>
           </p>
-          <p style="margin-bottom: var(--space-sm);">
-            1. Calls for immediate humanitarian pauses;<br>
-            2. Demands safe passage for humanitarian aid;<br>
-            3. Urges all parties to protect civilians;<br>
-            4. Decides to remain actively seized of the matter.
-          </p>
-          <div class="flex gap-sm" style="flex-wrap: wrap;">
-            <span class="badge badge--passed">13 Yes</span>
+          <div class="flex gap-sm" style="flex-wrap: wrap; margin-bottom: var(--space-sm);">
+            <span class="badge badge--passed">14 Yes</span>
             <span class="badge badge--closed">0 No</span>
-            <span class="badge badge--pending">2 Abstain</span>
-            <span class="badge badge--active">Binding · In Force</span>
+            <span class="badge badge--pending">1 Abstain (Russia)</span>
+            <span class="badge badge--active">Binding</span>
           </div>
+          <p class="t-secondary" style="font-size: var(--fs-small);">
+            <strong>In Favour:</strong> Algeria, China, Ecuador, France, Guyana, Japan, Malta, Mozambique, 
+            Sierra Leone, Slovenia, South Korea, Switzerland, United Kingdom, United States<br>
+            <strong>Abstaining:</strong> Russia
+          </p>
         </div>
       </div>
     </div>
   </section>
 
   <footer class="site-footer">
-    <div class="container">
-      <div class="footer__bottom">
-        <span class="footer__copyright">© 2026 UN Workflow Management System</span>
-        <a href="../index.html" class="back-link">← Back to Home</a>
-      </div>
-    </div>
+    <div class="container"><div class="footer__bottom">
+      <span class="footer__copyright">© 2026 UN Workflow Management System</span>
+      <a href="../index.html" class="back-link">← Back to Home</a>
+    </div></div>
   </footer>
 
   <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
