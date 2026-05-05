@@ -145,6 +145,12 @@
 <div class="toast" id="toast"></div>
 
 <main class="main">
+  <!-- Race condition demo banner for .2 alternate delegates -->
+  <div class="race-banner" id="race-banner">
+    <div class="race-banner-title">⚡ Concurrency Race Demo</div>
+    <p>You are logged in as an <strong>alternate representative</strong>. Your country's primary delegate (<code id="primary-username">—</code>) can also vote. If both vote simultaneously, MySQL's <code>FOR UPDATE</code> row lock will serialize the transactions — only one vote will succeed.</p>
+  </div>
+
   <!-- Matter selector (if multiple IN_VOTING) -->
   <div class="matter-selector" id="matter-selector" style="display:none">
     <label>Active Matter:</label>
@@ -275,10 +281,12 @@ function initNav() {
 
   // Detect if this is an alternate rep (username ends with .2)
   if (profile.username.endsWith('.2')) {
-    document.getElementById('race-banner').classList.add('show');
+    const banner = document.getElementById('race-banner');
+    if (banner) banner.classList.add('show');
     // Derive primary username: usa.ga.2 → usa.ga
     const primary = profile.username.replace(/\.2$/, '');
-    document.getElementById('primary-username').textContent = primary;
+    const el = document.getElementById('primary-username');
+    if (el) el.textContent = primary;
   }
 }
 
